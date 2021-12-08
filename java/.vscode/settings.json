@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "test",
+        "src"
+    ],
+    "java.test.config": {
+        "sourcePaths": ["lib"]
+    }
+}
