@@ -126,8 +126,6 @@ pub fn solve(map: Vec<Vec<u8>>) -> u32 {
 mod tests {
     
     use super::*;
-    
-    
 
     #[test]
     fn test_read_file() {
