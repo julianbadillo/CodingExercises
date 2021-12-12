@@ -8,4 +8,4 @@ edition = "2021"
 itertools = "0.10.3"
 
 [lib]
-path = "src/advent_day11.rs"
+path = "src/advent_day12.rs"
