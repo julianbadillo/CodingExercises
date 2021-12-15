@@ -1,4 +1,4 @@
-use std::{fs, vec, collections::HashMap};
+use std::{fs, vec, collections::HashMap, ops::Add};
 
 pub fn read_file(file_name: &str) -> Vec<String> {
     let data: String = fs::read_to_string(file_name)
@@ -16,6 +16,31 @@ pub fn get_rules(lines: &[String]) -> HashMap<String, String> {
         map.insert(parts[0].to_string(), parts[1].to_string());
     }
     return map;
+}
+
+pub fn process_template(template: String) -> (HashMap<String, u64>, HashMap<char, u64>){
+    let mut count_pairs: HashMap<String, u64> = HashMap::new();
+    let mut count_chars: HashMap<char, u64> = HashMap::new();
+    let n = template.len();
+    let chrs: Vec<char> = template.chars().collect();
+    for i in 0..n {
+        count_chars.insert(chrs[i], match count_chars.get(&chrs[i])
+                                                                {
+                                                                    Some(x) => x + 1,
+                                                                    None => 1
+                                                                });
+        if i < n - 1 {
+            let pair = &template[i..i+2].to_owned();
+            count_pairs.insert(pair.to_owned(), match count_pairs.get(pair)
+                                                            {
+                                                                Some(x) => x + 1,
+                                                                None => 1
+                                                            });
+        }
+    }
+
+    // return
+    (count_pairs, count_chars)
 }
 
 pub fn transform(template: &mut String, rules: &HashMap<String, String>) {
@@ -46,6 +71,10 @@ pub fn count_freq(template: &str) -> HashMap<char, u32>{
         count.insert(c, count.get(&c).unwrap() + 1);
     }
     return count;
+}
+
+pub fn tranform_map(count_pairs: &mut HashMap<String, u64>, count_chars: &mut HashMap<char, u64>, rules: &HashMap<String, String>){
+    // TODO
 }
 
 #[cfg(test)]
@@ -119,4 +148,42 @@ mod tests {
         let min = count.values().into_iter().min().unwrap();
         println!("max {} min {}, dif = {}", max, min, max-min);
     }
+
+    #[test]
+    fn test_process_template(){
+        let (cp, cc) = process_template(String::from("NCNBCHB"));
+        assert!(cp.contains_key("NC"));
+        assert!(cp.contains_key("CN"));
+        assert!(cp.contains_key("NB"));
+        
+        assert_eq!(cp["NC"], 1);
+        assert_eq!(cp["CN"], 1); 
+        assert_eq!(cp["NB"], 1);
+        assert_eq!(cp["CH"], 1);
+        assert_eq!(cp["HB"], 1);
+
+        assert_eq!(cc[&'N'], 2);
+        assert_eq!(cc[&'C'], 2);
+        assert_eq!(cc[&'B'], 2);
+        assert_eq!(cc[&'H'], 1);
+    }
+
+    #[test]
+    fn test_transform_map(){
+        let lines = read_file("advent_day14_test.txt");
+        let template = String::from(&lines[0]);
+        let rules = get_rules(&lines[2..]);
+        let (mut cp, mut cc) = process_template(template);
+        tranform_map(&mut cp, &mut cc, &rules);
+        println!("{:?}", cp);
+        println!("{:?}", cc);
+        // assert_eq!(template, "NCNBCHB");
+        // transform(&mut template, &rules);
+        // assert_eq!(template, "NBCCNBBBCBHCB");
+        // transform(&mut template, &rules);
+        // assert_eq!(template, "NBBBCNCCNBBNBNBBCHBHHBCHB");
+
+    }
+
+
 }
