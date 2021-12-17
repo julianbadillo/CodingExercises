@@ -1,7 +1,8 @@
-use core::panic;
 use std::fs;
 
-
+pub struct Packet {
+    version: u8, type_id: u8, value: u64, len: usize, total_version: u32
+}
 pub fn read_file(file_name: &str) -> String {
     let data: String = fs::read_to_string(file_name)
                           .expect("Unable to read file");
@@ -17,17 +18,19 @@ pub fn to_binary(input: &str) -> String {
     return stream;
 }
 
-pub fn parse_packet(binput: &str) -> (usize, u32, u32, u64) {
+pub fn parse_packet(binput: &str) -> Packet {
     // packet version
+    let mut packet = Packet {version: 0, len: 0, total_version: 0, type_id: 0, value: 0};
     let mut i: usize = 0;
-    let version = u32::from_str_radix(&binput[i..i+3], 2).unwrap();
-    let mut total_version = version;
-    let mut value: u64 = 0;
+    packet.version = u8::from_str_radix(&binput[i..i+3], 2).unwrap();
+    packet.total_version = packet.version as u32;
     i += 3;
-    let type_id = u8::from_str_radix(&binput[i..i+3], 2).unwrap();
+
+    packet.type_id = u8::from_str_radix(&binput[i..i+3], 2).unwrap();
     i += 3;
     // literal
-    if type_id == 4 {
+    if packet.type_id == 4 {
+        
         let mut literal_s = String::new(); 
         loop {
             let last = &binput[i..i+1] != "1";
@@ -39,83 +42,76 @@ pub fn parse_packet(binput: &str) -> (usize, u32, u32, u64) {
             }
         }
         // parse literal
-        value = u64::from_str_radix(literal_s.as_str(), 2).unwrap();
-        println!("Literal = {}", value);
+        packet.value = u64::from_str_radix(literal_s.as_str(), 2).unwrap();
+        //println!("Literal = {}", packet.value);
     }
     else {
         let bit_lt_id = &binput[i..i+1] == "0";
-        let mut values: Vec<u64> = vec![];
+        let mut values = vec![];
         i += 1;
+        let mut total_bits: usize = 0;
+        let mut total_count: u32 = 0;
+        let mut bits: usize = 0;
+        let mut count: u32 = 0;
+
         if bit_lt_id {
-            let total_bits = usize::from_str_radix(&binput[i..i+15], 2).unwrap();
+            total_bits = usize::from_str_radix(&binput[i..i+15], 2).unwrap();
             i += 15;
-            let mut bits: usize = 0;
-            println!("Operator = {}, on {} bits", type_id, total_bits);
-            loop {
-                let (read, v2, tv2, value2) = parse_packet(&binput[i..]);
-                // accumulate version
-                total_version += tv2;
-                bits += read;
-                i += read;
-                values.push(value2);
-                if bits == total_bits {
-                    break;
-                }
-                else if bits > total_bits {
-                    panic!("Here!!!");
-                }
-            }
         } else {
-            let number =u32::from_str_radix(&binput[i..i+11], 2).unwrap();
+            total_count =u32::from_str_radix(&binput[i..i+11], 2).unwrap();
             i += 11;
-            let mut pack = 0;
-            println!("Operator = {}, on {} packets", type_id, number);
-            loop {
-                let (read, v2, tv2, value2) = parse_packet(&binput[i..]);
-                // accumulate version
-                total_version += tv2;
-                i += read;
-                pack += 1;
-                values.push(value2);
-                if pack == number {
-                    break;
-                }
+        }
+        
+        //println!("Operator = {}, on {} bits", packet.type_id, total_bits);
+        loop {
+            let packet2 = parse_packet(&binput[i..]);
+            // accumulate version
+            packet.total_version += packet2.total_version;
+            bits += packet2.len;
+            i += packet2.len;
+            count += 1;
+            
+            values.push(packet2.value);
+            if bits == total_bits || count == total_count {
+                break;
             }
         }
+        
         //sum
-        if type_id == 0 {
-            value = values.iter().sum();
+        if packet.type_id == 0 {
+            packet.value = values.iter().sum();
         }
         //prod
-        else if type_id == 1 {
-            value = values.iter().product();
+        else if packet.type_id == 1 {
+            packet.value = values.iter().product();
         }
         //min
-        else if type_id == 2 {
-            value = values.into_iter().reduce(u64::min)
+        else if packet.type_id == 2 {
+            packet.value = values.into_iter().reduce(u64::min)
                                         .unwrap();
         }
         //max
-        else if type_id == 3 {
-            value = values.into_iter().reduce(u64::max)
+        else if packet.type_id == 3 {
+            packet.value = values.into_iter().reduce(u64::max)
                                         .unwrap();
         }
         // > 
-        else if type_id == 5 {
-            value = if values[0] > values[1] { 1 } else { 0 };
+        else if packet.type_id == 5 {
+            packet.value = if values[0] > values[1] { 1 } else { 0 };
         }
         // < 
-        else if type_id == 6 {
-            value = if values[0] < values[1] { 1 } else { 0 };
+        else if packet.type_id == 6 {
+            packet.value = if values[0] < values[1] { 1 } else { 0 };
         }
         // == 
-        else if type_id == 7 {
-            value = if values[0] == values[1] { 1 } else { 0 };
+        else if packet.type_id == 7 {
+            packet.value = if values[0] == values[1] { 1 } else { 0 };
         }
 
     }
-
-    return (i, version, total_version, value);
+    packet.len = i;
+    return packet;
+    //return (i, version, total_version, value);
 }
 
 
@@ -145,52 +141,52 @@ mod tests {
     #[test]
     fn test_parse_packet_version(){
         let b= to_binary("D2FE28");
-        let (_i, v, _tv, val)= parse_packet(b.as_str()); 
-        assert_eq!(v, 6);
-        assert_eq!(val, 2021);
+        let p= parse_packet(b.as_str()); 
+        assert_eq!(p.version, 6);
+        assert_eq!(p.value, 2021);
     }
 
     #[test]
     fn test_parse_packet_version_operator1(){
         let b= to_binary("38006F45291200");
-        let (_i, v, _tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(v, 1);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.version, 1);
     }
     
     #[test]
     fn test_parse_packet_version_operator2(){
         let b= to_binary("EE00D40C823060");
-        let (_i, v, _tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(v, 7);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.version, 7);
     }
 
     #[test]
     fn test_parse_packet_version_operator_totalv(){
         let b= to_binary("8A004A801A8002F478");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(tv, 16);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.total_version, 16);
     }
 
     #[test]
     fn test_parse_packet_version_operator_totalv2(){
         let b= to_binary("620080001611562C8802118E34");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(tv, 12);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.total_version, 12);
     }
 
     #[test]
     fn test_parse_packet_version_operator_totalv3(){
         let b= to_binary("C0015000016115A2E0802F182340");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(tv, 23);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.total_version, 23);
     }
 
     #[test]
     fn test_all_test(){
         let str = read_file("advent_day16_test.txt");
         let b= to_binary(str.as_str());
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(tv, 31);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.total_version, 31);
     }
 
     #[test]
@@ -198,64 +194,64 @@ mod tests {
         let str = read_file("advent_day16.txt");
         assert_eq!(str.len(), 1344);
         let b= to_binary(str.as_str());
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        println!("Total version = {}", tv);
+        let p = parse_packet(b.as_str()); 
+        println!("Total version = {}", p.total_version);
     }
 
     #[test]
     fn test_value_sum(){
         let b= to_binary("C200B40A82");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 3);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 3);
     }
 
     #[test]
     fn test_value_prod(){
         let b= to_binary("04005AC33890");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 54);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 54);
     }
 
     #[test]
     fn test_value_min(){
         let b= to_binary("880086C3E88112");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 7);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 7);
     }
 
     #[test]
     fn test_value_max(){
         let b= to_binary("CE00C43D881120");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 9);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 9);
     }
 
     #[test]
     fn test_value_ge(){
         let b= to_binary("D8005AC2A8F0");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 1);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 1);
     }
 
     #[test]
     fn test_value_le(){
         let b= to_binary("F600BC2D8F");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 0);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 0);
     }
 
     #[test]
     fn test_value_neq(){
         let b= to_binary("9C005AC2F8F0");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 0);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 0);
     }
     
     #[test]
     fn test_value_eq(){
         let b= to_binary("9C0141080250320F1802104A08");
-        let (_i, _v, tv, val) = parse_packet(b.as_str()); 
-        assert_eq!(val, 1);
+        let p = parse_packet(b.as_str()); 
+        assert_eq!(p.value, 1);
     }
 
     #[test]
@@ -263,7 +259,7 @@ mod tests {
         let str = read_file("advent_day16.txt");
         assert_eq!(str.len(), 1344);
         let b= to_binary(str.as_str());
-        let (_i, _v, _tv, val) = parse_packet(b.as_str()); 
-        println!("Total value = {}", val);
+        let p = parse_packet(b.as_str()); 
+        println!("Total value = {}", p.value);
     }
 }
