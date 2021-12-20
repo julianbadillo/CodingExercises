@@ -6,6 +6,7 @@ edition = "2021"
 
 [dependencies]
 itertools = "0.10.3"
+regex = "1"
 
 [lib]
-path = "src/advent_day16.rs"
+path = "src/advent_day18.rs"
