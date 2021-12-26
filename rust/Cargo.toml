@@ -9,4 +9,4 @@ itertools = "0.10.3"
 regex = "1"
 
 [lib]
-path = "src/advent_day22.rs"
+path = "src/advent_day23.rs"
