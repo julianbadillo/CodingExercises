@@ -51,7 +51,7 @@ def load_bingos(lines):
                 bingos.append(bingo)
             bingo = Bingo()
         else:
-            bingo.numbers.append([int(x) for x in filter(None, line.split(" "))])
+            bingo.numbers.append([int(x) for x in line.split(" ") if x])
     # if not appended
     if bingos[-1] != bingo:
         bingos.append(bingo)

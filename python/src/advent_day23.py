@@ -47,6 +47,65 @@ cave = [
         [Edge(13, 1)],
 ]
 
+#  #############
+#  #01.2.3.4.56#
+#  ###7#8#9#0###
+#    #1#2#3#4#
+#    #5#6#7#8#
+#    #9#0#1#2#
+#    #########
+
+
+large_cave = [
+        # 0
+        [Edge(1, 1)],
+        # 1
+        [Edge(0, 1), Edge(2, 2), Edge(7, 2)],
+        # 2
+        [Edge(1, 2), Edge(7, 2), Edge(8, 2), Edge(3, 2)],
+        # 3
+        [Edge(2, 2), Edge(8, 2), Edge(9, 2),  Edge(4, 2)],
+        # 4
+        [Edge(3, 2), Edge(9, 2), Edge(10, 2), Edge(5, 2)],
+        # 5
+        [Edge(4, 2), Edge(10, 2), Edge(6, 1)],
+        # 6
+        [Edge(5, 1),],
+        # 7
+        [Edge(1, 2), Edge(11, 1), Edge(2, 2)],
+        # 8
+        [Edge(2, 2), Edge(12, 1), Edge(3, 2)],
+        # 9
+        [Edge(3, 2), Edge(13, 1), Edge(4, 2)],
+        # 10
+        [Edge(4, 2), Edge(14, 1), Edge(5, 2)],
+        # 11
+        [Edge(7, 1), Edge(15, 1)],
+        # 12
+        [Edge(8, 1), Edge(16, 1)],
+        # 13
+        [Edge(9, 1), Edge(17, 1)],
+        # 14
+        [Edge(10, 1), Edge(18, 1)],
+        # 15
+        [Edge(11, 1), Edge(19, 1)],
+        # 16
+        [Edge(12, 1), Edge(20, 1)],
+        # 17
+        [Edge(13, 1), Edge(21, 1)],
+        # 18
+        [Edge(14, 1), Edge(22, 1)],
+        # 19
+        [Edge(15, 1)],
+        # 20
+        [Edge(16, 1)],
+        # 21
+        [Edge(17, 1)],
+        # 22
+        [Edge(18, 1)],
+        
+]
+
 
 def print_pods(pods):
 
@@ -182,6 +241,51 @@ def explore(pods):
     # get the combinations with lowest energy
     return min(energy[pods2] for pods2 in finals)
 
+def explore_large(pods):
+    start = tuple(pods)
+    energy = {}
+    queue = []
+    finals = set()
+    queue.append(start)
+    energy[start] = 0
+    count = 0
+
+    # BFS - Dijsktra
+    while len(queue) > 0:
+        pods2 = queue.pop(0)
+        if is_final_large(pods2):
+            print("Final position found!!!", pods2)
+            finals.add(pods2)
+        e = energy[pods2]
+
+        # each pod
+        for (id, pos) in enumerate(pods2):
+
+            # possible moves
+            for edge in large_cave[pos]:
+                # if it's not forbidden
+                if not is_valid_move_large(id, edge.dest, pods2):
+                    continue
+                pod_eng = 10 ** (id // 4) # depending on the pod moved
+                new_energy = e + edge.eng * pod_eng # energy required
+                # new positions
+                new_pods = list(pods2)
+                new_pods[id] = edge.dest
+                new_pods = tuple(new_pods)
+                # if no path or better energy path
+                if new_pods not in energy:
+                    energy[new_pods] = new_energy
+                    queue.append(new_pods)
+                elif new_energy < energy[new_pods]:
+                    #queue.append(new_pods)
+                    energy[new_pods] = new_energy
+        count += 1
+        if count % 100000 == 0:
+             print("Count ", count)
+    # get the combinations with lowest energy
+    return min(energy[pods2] for pods2 in finals)
+
+
 
 def score(pods, steps):
     """
@@ -204,6 +308,32 @@ def score(pods, steps):
         raise Exception("Not a final state")
     
     return energy
+
+def score_large(pods, steps):
+    """
+    Scores a solution based on the larger cave
+    """
+    energy = 0 
+    for (id, dest) in steps:
+        #print_pods(pods)
+        if not is_valid_move_large(id, dest, pods):
+            raise Exception(f"Not valid move {id}: {dest}")
+        pod_eng = 10 ** (id // 4) # depending on the pod moved
+        origin = pods[id]
+        # add energy of move
+        try:
+            edge = next(filter(lambda e: e.dest == dest, large_cave[origin]))
+            energy += pod_eng * edge.eng
+            # change the position of the pods
+            pods[id] = dest
+        except StopIteration:
+            raise Exception(f"Edge not found {id}: ({origin} -> {dest})")
+    #print_pods(pods)
+    if not is_final_large(pods):
+        raise Exception("Not a final state")
+    
+    return energy
+
 
 def is_final(pods):
 
@@ -237,6 +367,31 @@ def is_final(pods):
         return False
 
     return True
+
+def is_final_large(pods):
+    # // #############
+    # // #01.2.3.4.56#
+    # // ###7#8#9#0###
+    # //   #1#2#3#4#
+    # //   #5#6#7#8#
+    # //   #9#0#1#2#
+    # //   #########
+    #// 
+    for id, pos in enumerate(pods):
+        # A
+        if 0 <= id <= 3 and pos not in [7,11,15,19]:
+            return False
+        # B
+        elif 4 <= id <= 7 and pos not in [8, 12, 16, 20]:
+            return False
+        # C
+        elif 8 <= id <= 11 and pos not in [9, 13, 17, 21]:
+            return False 
+        # D
+        elif 12 <= id <= 15 and pos not in [10, 14, 18, 22]:
+            return False
+    return True
+
 
 
 def is_valid_move(id, end, pods):
@@ -302,3 +457,122 @@ def is_valid_move(id, end, pods):
         if end == 11 and 12 in pods and pods.index(12) != 6 and pods.index(12) != 7:
             return False
     return True
+
+def is_valid_move_large(id, end, pods):
+
+    # if it's not already occupied.
+    if end in pods:
+        return False
+    start = pods[id]
+    
+    # // #############
+    # // #01.2.3.4.56#
+    # // ###7#8#9#0###
+    # //   #1#2#3#4#
+    # //   #5#6#7#8#
+    # //   #9#0#1#2#
+    # //   #########
+    #// 
+    
+    # A -> cannot move non-A slots, except to get out
+    if 0 <= id <= 3:
+        if start < end and end in [
+                    #7, 11, 15, 19, # A
+                    8, 12, 16, 20, # B
+                    9, 13, 17, 21, # C
+                    10, 14, 18, 22 # D
+                    ]:
+            return False
+        # cannot move in if occupied by a non-A
+        if start < end and end in [
+                    7, 11, 15, # A
+                    #8, 12, 16, # B
+                    #9, 13, 17, # C
+                    #10, 14, 18, # D
+                    ] and any(p in pods and pods.index(p) not in [0,1,2,3] for p in [11, 15, 19]): 
+            return False
+
+    # B -> cannot move non-B slots, except to get out
+    if 4 <= id <= 7:
+        if end in [
+                    7, 11, 15, 19, # A
+                    #8, 12, 16, 20, # B
+                    9, 13, 17, 21, # C
+                    10, 14, 18, 22 # D
+                    ] and start < end:
+            return False
+        # cannot move if occupied by a non-A
+        if start < end and end in [
+                    #7, 11, 15, # A
+                    8, 12, 16, # B
+                    #9, 13, 17, # C
+                    #10, 14, 18, # D
+                    ] and any(p in pods and pods.index(p) not in [4,5,6,7] for p in [12, 16, 20]): 
+            return False
+    # C -> cannot move non-C slots, except to get out
+    if 8 <= id <= 11:
+        if end in [
+                    7, 11, 15, 19, # A
+                    8, 12, 16, 20, # B
+                    #9, 13, 17, 21, # C
+                    10, 14, 18, 22 # D
+                    ] and start < end:
+            return False
+        # cannot move if occupied by a non-A
+        if start < end and end in [
+                    #7, 11, 15, # A
+                    #8, 12, 16, # B
+                    9, 13, 17, # C
+                    #10, 14, 18, # D
+                    ] and any(p in pods and pods.index(p) not in [8,9,10,11] for p in [13, 17, 21]): 
+            return False
+    # D -> cannot move non-D slots, except to get out
+    if 12 <= id <= 15:
+        if end in [
+                    7, 11, 15, 19, # A
+                    8, 12, 16, 20, # B
+                    9, 13, 17, 21, # C
+                    #10, 14, 18, 22 # D
+                    ] and start < end:
+            return False
+        # cannot move if occupied by a non-A
+        if start < end and end in [
+                    #7, 11, 15, # A
+                    #8, 12, 16, # B
+                    #9, 13, 17, # C
+                    10, 14, 18, # D
+                    ] and any(p in pods and pods.index(p) not in [12,13,14,15] for p in [14, 18, 22]): 
+            return False
+    
+    return True
+
+
+if __name__ == '__main__':
+    # #############
+    # #...........#
+    # ###B#C#B#D###
+    #   #D#C#B#A#
+    #   #D#B#A#C#
+    #   #A#D#C#A#
+    #   #########
+
+    # #############
+    # #01.2.3.4.56#
+    # ###7#8#9#0###
+    #   #1#2#3#4#
+    #   #5#6#7#8#
+    #   #9#0#1#2#
+    #   #########
+
+    pods = [
+            #A
+            10, 14, 17, 22,
+            #B
+            7, 13, 16, 21,
+            #C
+            9, 12, 18, 19,
+            #D
+            8, 11, 15, 20,
+        ]
+    r = explore_large(pods)
+    print(f"Min energy = {r}")
