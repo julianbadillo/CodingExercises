@@ -1,4 +1,5 @@
-from advent_day5 import *
+from adventofcode2021.advent_day5 import *
+
 
 def test_vent_init():
     vent = Vent("0,9 -> 5,9")
@@ -12,6 +13,7 @@ def test_vent_init():
     assert vent.dy == 0
     assert vent.l == 5
 
+
 def test_vent_init2():
     vent = Vent("6,4 -> 2,0")
     assert vent.x1 == 6
@@ -24,33 +26,41 @@ def test_vent_init2():
     assert vent.dy == -1
     assert vent.l == 4
 
+
 def test_mark_map():
     vent = Vent("1,0 -> 3,0")
     map = [[0 for i in range(5)] for j in range(5)]
     vent.mark(map)
 
-    assert map == [[0, 0, 0, 0, 0],
-                    [1, 0, 0, 0, 0],
-                    [1, 0, 0, 0, 0],
-                    [1, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0],]
+    assert map == [
+        [0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ]
+
 
 def test_mark_map2():
     vent = Vent("1,3 -> 3,1")
     map = [[0 for i in range(5)] for j in range(5)]
     vent.mark(map)
 
-    assert map == [[0, 0, 0, 0, 0],
-                    [0, 0, 0, 1, 0],
-                    [0, 0, 1, 0, 0],
-                    [0, 1, 0, 0, 0],
-                    [0, 0, 0, 0, 0],]
+    assert map == [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ]
+
 
 def test_overlap_hv_test():
     lines = read_file("./data/adventofcode2021/advent_day5_test.txt")
     vents = load_vents(lines)
     s = overlap_hv(vents)
     assert s == 5
+
 
 def test_overlap_hv():
     lines = read_file("./data/adventofcode2021/advent_day5.txt")
@@ -64,6 +74,7 @@ def test_overlap_test():
     vents = load_vents(lines)
     s = overlap_hv(vents)
     assert s == 12
+
 
 def test_overlap():
     lines = read_file("./data/adventofcode2021/advent_day5.txt")

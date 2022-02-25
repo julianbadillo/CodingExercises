@@ -1,21 +1,20 @@
-
 class Node:
     def __init__(self, name):
         self.name = name
         self.visited = False
-        self.big = 'A' <= name[0] <= 'Z'
+        self.big = "A" <= name[0] <= "Z"
         self.edges = []
-    
+
     def link(self, node):
         self.edges.append(node)
-    
+
 
 def read_file(file_name):
     """
     Reads the text file
     """
-    with open(file_name, 'r') as file:
-        list = [line.strip().split('-') for line in file.readlines()]
+    with open(file_name, "r") as file:
+        list = [line.strip().split("-") for line in file.readlines()]
         return list
 
 
@@ -56,19 +55,22 @@ def count_paths_r(node, path):
         count += count_paths_r(node2, path + [node.name])
     return count
 
+
 def count_paths2(graph):
     start = graph["start"]
     return count_paths_r2(start, [])
 
+
 def any_small_duplicate(path):
-    return any('a' <= x[0] <= 'z' and path.count(x) == 2 for x in path)
+    return any("a" <= x[0] <= "z" and path.count(x) == 2 for x in path)
+
 
 def count_paths_r2(node, path):
     # base cases
     if node.name == "end":
-        #print(path + ['end'])
+        # print(path + ['end'])
         return 1
-    
+
     # if a small node and already in the path and there's a duplicate
     if not node.big and node.name in path and any_small_duplicate(path):
         return 0

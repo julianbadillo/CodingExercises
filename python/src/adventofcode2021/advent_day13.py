@@ -1,31 +1,31 @@
-
 def read_file(file_name):
     """
     Reads the text file
     """
-    with open(file_name, 'r') as file:
+    with open(file_name, "r") as file:
         coords = set()
         instructions = []
-        for l in file.readlines():
-            l = l.strip()
-            if ',' in l:
-                p = l.split(',')
+        for line in file.readlines():
+            line = line.strip()
+            if "," in line:
+                p = line.split(",")
                 coords.add((int(p[0]), int(p[1])))
-            elif l:
-                instructions.append(l)
-        
+            elif line:
+                instructions.append(line)
+
         return coords, instructions
 
 
-def fold(p, x = None, y = None):
-    if x != None and p[0] > x:
-        return (2*x - p[0], p[1])
-    if y != None and p[1] > y:
-        return (p[0], 2*y - p[1])
+def fold(p, x=None, y=None):
+    if x is not None and p[0] > x:
+        return (2 * x - p[0], p[1])
+    if y is not None and p[1] > y:
+        return (p[0], 2 * y - p[1])
     return p
 
+
 def fold_one(points, inst):
-    x = None 
+    x = None
     y = None
     if "fold along y=" in inst:
         y = int(inst.split("=")[1])
@@ -37,17 +37,18 @@ def fold_one(points, inst):
 
 
 def fold_all(points, inst):
-    
+
     for i in inst:
-        x = None 
+        x = None
         y = None
         if "fold along y=" in i:
             y = int(i.split("=")[1])
         if "fold along x=" in i:
             x = int(i.split("=")[1])
         points = {fold(p2, x, y) for p2 in points}
-    
+
     return points
+
 
 def print_points(points):
     max_x = max(p[0] for p in points)
@@ -60,5 +61,3 @@ def print_points(points):
             else:
                 print(" ", end="")
         print()
-
-

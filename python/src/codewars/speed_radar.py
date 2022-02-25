@@ -18,6 +18,8 @@ Method signature:
 def averageSpeed(self, minLimit, maxLimit, readings):
 
 """
+
+
 class SpeedRadar:
     def averageSpeed(self, minLimit, maxLimit, readings):
         total = 0.0
@@ -28,15 +30,15 @@ class SpeedRadar:
             else:
                 total += r
 
-        if inf*10 > len(readings):
+        if inf * 10 > len(readings):
             return 0.0
         else:
-            print total, len(readings)
-            avg = total / (len(readings)-inf)
-            print avg
+            print(total, len(readings))
+            avg = total / (len(readings) - inf)
+            print(avg)
             return avg
-       
+
 
 s = SpeedRadar()
-a = s.averageSpeed(1, 50, [42,43,44,45,46,47,48,49,50,51] )
-print a
+a = s.averageSpeed(1, 50, [42, 43, 44, 45, 46, 47, 48, 49, 50, 51])
+print(a)

@@ -87,25 +87,29 @@ Returns: 2500
 
 This problem statement is the exclusive and proprietary property of TopCoder, Inc. Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited. (c)2003, TopCoder, Inc. All rights reserved.
 """
+
+
 class TreeNode:
-    pass    
+    pass
+
 
 class PowerOutage:
     tree = {}
+
     def estimateTimeOut(self, fromJunction, toJunction, ductLength):
-        #build the tree, a map from ---> (map to --> lengnth)   
+        # build the tree, a map from ---> (map to --> lengnth)
         for i in range(len(fromJunction)):
             fr = fromJunction[i]
             to = toJunction[i]
             l = ductLength[i]
             if fr not in self.tree:
-                self.tree[fr] =  {}
+                self.tree[fr] = {}
             self.tree[fr][to] = l
-        
-        total = sum(ductLength)#self.traverseFullTree(fromJunction[0])
+
+        total = sum(ductLength)  # self.traverseFullTree(fromJunction[0])
         maxpath = self.getLongestPath(fromJunction[0])
-        return 2*total - maxpath
-    
+        return 2 * total - maxpath
+
     def traverseFullTree(self, fr):
         s = 0
         if not fr in self.tree:
@@ -124,20 +128,19 @@ class PowerOutage:
                 maxpath = path
         return maxpath
 
+
 if __name__ == "__main__":
     po = PowerOutage()
-    print po.estimateTimeOut([0],[1],[10])
-    a = [0,1,0]
-    b = [1,2,3]
-    c = [10,10,10]
-    print po.estimateTimeOut(a,b,c)
-    a = [0,0,0,1,4]
-    b = [1,3,4,2,5]
-    c = [10,10,100,10,5]
-    print po.estimateTimeOut(a,b,c)
-    a = [0,0,0,1,4,4,6,7,7,7,20]
-    b = [1,3,4,2,5,6,7,20,9,10,31]
-    c = [10,10,100,10,5,1,1,100,1,1,5]
-    print po.estimateTimeOut(a,b,c)
-
-
+    print(po.estimateTimeOut([0], [1], [10]))
+    a = [0, 1, 0]
+    b = [1, 2, 3]
+    c = [10, 10, 10]
+    print(po.estimateTimeOut(a, b, c))
+    a = [0, 0, 0, 1, 4]
+    b = [1, 3, 4, 2, 5]
+    c = [10, 10, 100, 10, 5]
+    print(po.estimateTimeOut(a, b, c))
+    a = [0, 0, 0, 1, 4, 4, 6, 7, 7, 7, 20]
+    b = [1, 3, 4, 2, 5, 6, 7, 20, 9, 10, 31]
+    c = [10, 10, 100, 10, 5, 1, 1, 100, 1, 1, 5]
+    print(po.estimateTimeOut(a, b, c))

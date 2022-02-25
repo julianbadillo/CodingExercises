@@ -1,7 +1,7 @@
 from itertools import permutations
 
-class Piece:
 
+class Piece:
     def __init__(self, mat):
         self.n = len(mat)
         # clockwise
@@ -10,20 +10,26 @@ class Piece:
         self.__set_edges()
 
     def __set_edges(self):
-        self.up = [i for i in self.mat[0]]#first row
-        self.right = [self.mat[i][-1] for i in range(self.n)]#last column 
-        self.down = [self.mat[-1][i] for i in range(self.n-1, -1, -1)]#last row - inverted
-        self.left = [self.mat[i][0] for i in range(self.n-1, -1, -1)]#first column - inverted
-        self.edges = {'up': self.up, 
-                    'right': self.right, 
-                    'down': self.down, 
-                    'left': self.left}
+        self.up = [i for i in self.mat[0]]  # first row
+        self.right = [self.mat[i][-1] for i in range(self.n)]  # last column
+        self.down = [
+            self.mat[-1][i] for i in range(self.n - 1, -1, -1)
+        ]  # last row - inverted
+        self.left = [
+            self.mat[i][0] for i in range(self.n - 1, -1, -1)
+        ]  # first column - inverted
+        self.edges = {
+            "up": self.up,
+            "right": self.right,
+            "down": self.down,
+            "left": self.left,
+        }
 
     def flip(self):
         """Flips piece horizontally (reverse rows)"""
         self.mat = [list(reversed(row)) for row in self.mat]
         self.__set_edges()
-    
+
     def rotate(self):
         """Rotates nine degrees clockwise"""
         old_mat = self.mat
@@ -37,7 +43,7 @@ class Piece:
     def print(self):
         for name, edge in self.edges.items():
             print(f"{name}: {edge}")
-    
+
     @staticmethod
     def edges_fit(edge1, edge2):
         """
@@ -54,22 +60,24 @@ class Piece:
             # sides
             elif edge1[i] + edge2[j] != 1:
                 return False
-        return True    
+        return True
+
 
 fit_map = {
-    (0,1): ('left', 'up'),
-    (0,2): ('down', 'up'),
-    (0,3): ('right', 'up'),
-    (0,5): ('up', 'down'),
-    (1,2): ('right', 'left'),
-    (1,4): ('down', 'left'),
-    (1,5): ('left', 'left'),
-    (2,3): ('right', 'left'),
-    (2,4): ('down', 'up'),
-    (3,4): ('down', 'right'),
-    (3,5): ('right', 'right'),
-    (4,5): ('down', 'up'),
+    (0, 1): ("left", "up"),
+    (0, 2): ("down", "up"),
+    (0, 3): ("right", "up"),
+    (0, 5): ("up", "down"),
+    (1, 2): ("right", "left"),
+    (1, 4): ("down", "left"),
+    (1, 5): ("left", "left"),
+    (2, 3): ("right", "left"),
+    (2, 4): ("down", "up"),
+    (3, 4): ("down", "right"),
+    (3, 5): ("right", "right"),
+    (4, 5): ("down", "up"),
 }
+
 
 def is_solved(pieces):
     """
@@ -114,7 +122,7 @@ def solve_pieces(pieces):
         # make a permutation array
         for i in order:
             pieces_copy.append(pieces[i])
-        
+
         # try all rotations
         while True:
             # if is solve - finish
@@ -123,12 +131,13 @@ def solve_pieces(pieces):
             # try next rotation until finished
             if not next_rotation(pieces_copy):
                 break
-        
+
         # reset
         pieces_copy.clear()
     return pieces_copy
 
-def solve_snafooz(pieces): # pieces = int[6][6][6]
+
+def solve_snafooz(pieces):  # pieces = int[6][6][6]
 
     # make an array of pieces
     pieces_arr = []

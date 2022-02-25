@@ -1,7 +1,9 @@
-
 from itertools import *
+
+
 class Vent:
     size = 5
+
     def __init__(self, line) -> None:
         p1, p2 = line.split(" -> ")
         self.x1, self.y1 = (int(x) for x in p1.split(","))
@@ -11,22 +13,25 @@ class Vent:
         self.dx = 0 if self.w == 0 else self.w // abs(self.w)
         self.dy = 0 if self.h == 0 else self.h // abs(self.h)
         self.l = max(abs(self.w), abs(self.h))
-        
+
     def mark(self, map):
         for i in range(self.l + 1):
             map[self.x1 + self.dx * i][self.y1 + self.dy * i] += 1
-    
+
+
 def read_file(file_name):
     """
     Reads the text file
     """
-    with open(file_name, 'r') as file:
+    with open(file_name, "r") as file:
         list = [line.strip() for line in file.readlines()]
         return list
 
+
 def load_vents(lines):
     return [Vent(line) for line in lines]
-    
+
+
 def overlap_hv(vents):
     w = max(max(v.x1, v.x2) for v in vents)
     h = max(max(v.y1, v.y2) for v in vents)
@@ -39,6 +44,7 @@ def overlap_hv(vents):
 
     # count overlapping points
     return sum(sum(1 if x > 1 else 0 for x in row) for row in map)
+
 
 def overlap_hv(vents):
     w = max(max(v.x1, v.x2) for v in vents)

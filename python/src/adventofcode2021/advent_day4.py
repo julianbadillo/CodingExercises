@@ -1,6 +1,6 @@
-
 class Bingo:
     size = 5
+
     def __init__(self) -> None:
         self.numbers = []
         self.marked = [[False for i in range(Bingo.size)] for j in range(Bingo.size)]
@@ -19,17 +19,16 @@ class Bingo:
                 if self.numbers[i][j] == n:
                     self.marked[i][j] = True
                     # Check row or column all true
-                    if all(self.marked[i]) or \
-                        all(self.marked[k][j] for k in range(Bingo.size)):
+                    if all(self.marked[i]) or all(
+                        self.marked[k][j] for k in range(Bingo.size)
+                    ):
                         # mark as finished
                         self.finished = True
                         # sum all unmarked
                         s = 0
                         for k in range(Bingo.size):
                             for l in range(Bingo.size):
-                                s += self.numbers[k][l] \
-                                    if not self.marked[k][l] \
-                                    else 0
+                                s += self.numbers[k][l] if not self.marked[k][l] else 0
                         return s
         return None
 
@@ -38,9 +37,10 @@ def read_file(file_name):
     """
     Reads the text file
     """
-    with open(file_name, 'r') as file:
+    with open(file_name, "r") as file:
         list = [line.strip() for line in file.readlines()]
         return list
+
 
 def load_bingos(lines):
     bingos = []
@@ -56,6 +56,7 @@ def load_bingos(lines):
     if bingos[-1] != bingo:
         bingos.append(bingo)
     return bingos
+
 
 def play_game(numbers, bingos):
     for n in numbers:
@@ -77,14 +78,12 @@ def play_game_loser(numbers, bingos):
                 return (n, res)
 
 
-
 if __name__ == "__main__":
     lines = read_file("test/advent_day4_test.txt")
     numbers = []
-    
+
     numbers = [int(x) for x in filter(None, lines[0].split(","))]
     bingos = load_bingos(lines[1:])
     for b in bingos:
         b.print()
         print()
-

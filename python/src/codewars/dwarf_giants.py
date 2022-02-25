@@ -28,6 +28,7 @@ def height(tree, r):
             h = max(h, 1 + height(tree, child))
     return h
 
+
 n = int(raw_input())  # the number of relationships of influence
 tree = {}
 parent = {}
@@ -42,4 +43,4 @@ for i in xrange(n):
 
 h = get_height(tree, parent)
 # The number of people involved in the longest succession of influences
-print h
+print(h)

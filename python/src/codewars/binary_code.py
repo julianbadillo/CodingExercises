@@ -84,14 +84,16 @@ Returns:
 
 This problem statement is the exclusive and proprietary property of TopCoder, Inc. Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited. (c)2003, TopCoder, Inc. All rights reserved.
 """
+
+
 class BinaryCode:
     def decode(self, message):
         p = [int(c) for c in message]
-        #assume 0
-        return (self._decode(p,0),self._decode(p,1))
+        # assume 0
+        return (self._decode(p, 0), self._decode(p, 1))
 
     def _decode(self, p, start):
-        if len(p) == 1 and p[0] not in [0,1]:
+        if len(p) == 1 and p[0] not in [0, 1]:
             return "NONE"
         elif len(p) == 1:
             return str(p[0])
@@ -99,22 +101,21 @@ class BinaryCode:
         c = [0 for i in range(len(p))]
         c[0] = start
         c[1] = p[0] - c[0]
-        for i in range(1,len(p)-1):
-            c[i+1] = p[i] - c[i-1] - c[i]
+        for i in range(1, len(p) - 1):
+            c[i + 1] = p[i] - c[i - 1] - c[i]
         c[-1] = p[-1] - c[-2]
-        s = ''.join(str(n) for n in c)
-        return s if '-' not in s else "NONE"
-    
+        s = "".join(str(n) for n in c)
+        return s if "-" not in s else "NONE"
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     b = BinaryCode()
-    print b.decode("3")
-    print b.decode("1")
-    print b.decode("0")
-    print b.decode("123210122")
-    print b.decode("11")
-    print b.decode("22111")
-    print b.decode("123210120")
+    print(b.decode("3"))
+    print(b.decode("1"))
+    print(b.decode("0"))
+    print(b.decode("123210122"))
+    print(b.decode("11"))
+    print(b.decode("22111"))
+    print(b.decode("123210120"))
 
-    print b.decode("12221112222221112221111111112221111")
-
+    print(b.decode("12221112222221112221111111112221111"))

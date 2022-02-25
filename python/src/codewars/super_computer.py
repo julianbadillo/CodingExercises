@@ -23,8 +23,8 @@ def has_overlapping(calcs):
     """
     Assume sorted by starting day
     """
-    for i in xrange(len(calcs)-1):
-        calc1, calc2 = calcs[i], calcs[i+1]
+    for i in xrange(len(calcs) - 1):
+        calc1, calc2 = calcs[i], calcs[i + 1]
         if calc1.end > calc2.start:
             return True
     return False
@@ -32,17 +32,19 @@ def has_overlapping(calcs):
 
 def get_overlappings(calcs):
     # clear overlapping count
-    for c in calcs: c.overlaps = 0
+    for c in calcs:
+        c.overlaps = 0
 
     for i in xrange(len(calcs)):
         c1 = calcs[i]
-        for j in xrange(i+1, len(calcs)):
+        for j in xrange(i + 1, len(calcs)):
             c2 = calcs[j]
             if c1.start <= c2.start < c1.end:
                 c1.overlaps += 1
                 c2.overlaps += 1
             else:
                 break
+
 
 n = int(raw_input())
 
@@ -55,7 +57,7 @@ for i in xrange(n):
 t1 = time.time()
 calcs = sorted(calcs, key=lambda c: c.start)
 t2 = time.time()
-#print "Time", t2-t1
+# print "Time", t2-t1
 
 # Ideas, dynamic programming?
 
@@ -89,7 +91,7 @@ if has_overlapping(calcs):
             pass
         elif y == len(calcs2):
             # only test previous
-            c1 = calcs2[y-1]
+            c1 = calcs2[y - 1]
             c2 = new_calc
             if c1.start == c2.start or c1.end > c2.start:
                 collides = True
@@ -107,7 +109,7 @@ if has_overlapping(calcs):
 
         else:
             # test after and before
-            c1 = calcs2[y-1]
+            c1 = calcs2[y - 1]
             c2 = new_calc
             c3 = calcs2[y]
             if c1.start == c2.start or c2.start < c1.end:
@@ -129,6 +131,6 @@ if has_overlapping(calcs):
     calcs = calcs2
 t2 = time.time()
 
-#print "Time", t2-t1
+# print "Time", t2-t1
 
-print len(calcs)
+print(len(calcs))

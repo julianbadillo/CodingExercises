@@ -25,14 +25,15 @@ def decision(road, bikes):
     for bike in bikes:
         # Active bikes
         if bike.a == 1:
-            lane = road[bike.y][bike.x+1:]  # lane ahead
+            lane = road[bike.y][bike.x + 1 :]  # lane ahead
             # there is a hole ahead - JUMP
             print >> sys.stderr, lane
-            if "0" in lane[:bike.s-1]:
+            if "0" in lane[: bike.s - 1]:
                 return "JUMP"
-            elif bike.s < len(lane) and lane[bike.s-1] == "0":  # last block
+            elif bike.s < len(lane) and lane[bike.s - 1] == "0":  # last block
                 return "UP"
     return "WAIT"
+
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
@@ -59,4 +60,4 @@ while True:
     for l in road:
         print >> sys.stderr, l
 
-    print decision(road, bikes)
+    print(decision(road, bikes))

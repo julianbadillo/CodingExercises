@@ -13,6 +13,7 @@ The elevator starts on the k-th floor. Count how many times the buttons should b
 import sys
 import math
 
+
 def find_min_bfs(n, a, b, k, m):
     """
     BFS exploration, first found its optimal
@@ -28,12 +29,12 @@ def find_min_bfs(n, a, b, k, m):
     10000 3 2 1 9999
     """
     min_steps = {}
-    queue = [(0,0)]
+    queue = [(0, 0)]
 
     while len(queue) > 0:
         i, j = queue.pop(0)
         # base case - found
-        p = k + a*i - b*j
+        p = k + a * i - b * j
         if p == m:
             min_steps[p] = i + j
             return i + j
@@ -57,9 +58,9 @@ def find_min_bfs(n, a, b, k, m):
         r1, r2 = None, None
         # can move up - recursive
         if p + a <= n:
-            queue.append((i+1, j))
+            queue.append((i + 1, j))
         if p - b >= 1:
-            queue.append((i, j+1))
+            queue.append((i, j + 1))
 
 
 def find_min(n, a, b, k, m):
@@ -70,28 +71,29 @@ def find_min(n, a, b, k, m):
     """
     for i in range(n):
         for j in range(n):
-            mx = k + a*i - b*j
+            mx = k + a * i - b * j
             if mx == m:
                 return i + j
     return None
+
 
 n, a, b, k, m = [int(i) for i in raw_input().split()]
 
 # easy case k == m
 if k == m:
-    print 0
+    print(0)
 # easy case if m > k (need to go up) and m - k % a == 0
 elif m > k and (m - k) % a == 0:
-    print (m - k) / a
+    print((m - k) / a)
 # easy case, if k > m (need to go down) and l - m % b == 0
 elif k > m and (k - m) % b == 0:
-    print (k - m) / b
+    print((k - m) / b)
 # easy case if we cannot move the elevator
 elif k + a > n and k - b < 1:
-    print "IMPOSSIBLE"
+    print("IMPOSSIBLE")
 else:
     m = find_min_bfs(n, a, b, k, m)
     if m is None:
-        print "IMPOSSIBLE"
+        print("IMPOSSIBLE")
     else:
-        print m
+        print(m)

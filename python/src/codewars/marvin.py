@@ -1,10 +1,11 @@
+from distutils.log import error
 import sys
 import math
 from itertools import product
 from pprint import pprint
 
-class MarvinSolver:
 
+class MarvinSolver:
     def __init__(self):
         """
         Initialization
@@ -22,7 +23,16 @@ class MarvinSolver:
         # read input
         parts = [int(i) for i in raw_input().split()]
         # print >> sys.stderr, ' '.join(str(s) for s in parts)
-        self.n_rows, self.n_cols, self.n_rounds, self.ex_row, self.ex_col, self.n_clones, self.n_add_els, self.n_els = parts
+        (
+            self.n_rows,
+            self.n_cols,
+            self.n_rounds,
+            self.ex_row,
+            self.ex_col,
+            self.n_clones,
+            self.n_add_els,
+            self.n_els,
+        ) = parts
         self.elevs = set()
         self.add_elevs = set()
         self.strategy = {}
@@ -65,8 +75,10 @@ class MarvinSolver:
             # remove blocks
 
     def get_cost(self):
-        return 1 + min(self.distance[(self.ex_row, self.ex_col, "R")],
-                   self.distance[(self.ex_row, self.ex_col, "L")])
+        return 1 + min(
+            self.distance[(self.ex_row, self.ex_col, "R")],
+            self.distance[(self.ex_row, self.ex_col, "L")],
+        )
 
     def update_position(self, r, c, dr):
         """
@@ -86,12 +98,14 @@ class MarvinSolver:
         """
         # The ones without elevator
         elev_levels = set([e[0] for e in self.elevs])
-        wo_levels = [i for i in range(self.n_rows) if i != self.ex_row and i not in elev_levels]
+        wo_levels = [
+            i for i in range(self.n_rows) if i != self.ex_row and i not in elev_levels
+        ]
 
         # add an elevator in each non-connected level
         for row in wo_levels:
             # calculate col for elevator
-            col = (self.st_col + self.ex_col)/2
+            col = (self.st_col + self.ex_col) / 2
             # add elevator
             self.add_elevs.add((row, col))
 
@@ -105,46 +119,48 @@ class MarvinSolver:
 
         for i in range(len(self.path) - 3):
             # get three
-            if all(i == j for i, j in zip(self.moves[i:i+3], ["R", "U", "L"])):
+            if all(i == j for i, j in zip(self.moves[i : i + 3], ["R", "U", "L"])):
                 # get if the given point is an elevator made by us
-                r, c, dr = self.path[i+1]
+                r, c, dr = self.path[i + 1]
                 if (r, c) in self.add_elevs:
                     # move elevator to the left (we need to recalculate strategy)
                     self.add_elevs.remove((r, c))
-                    self.add_elevs.add((r, c-1))
+                    self.add_elevs.add((r, c - 1))
                     return True
-            elif all(i == j for i, j in zip(self.moves[i:i+3], ["L", "U", "R"])):
+            elif all(i == j for i, j in zip(self.moves[i : i + 3], ["L", "U", "R"])):
                 # get if the given point is an elevator made by us
-                r, c, dr = self.path[i+1]
+                r, c, dr = self.path[i + 1]
                 if (r, c) in self.add_elevs:
                     # move elevator to the right (we need to recalculate strategy)
                     self.add_elevs.remove((r, c))
-                    self.add_elevs.add((r, c+1))
+                    self.add_elevs.add((r, c + 1))
                     return True
 
         for i in range(len(self.path) - 4):
             # get four
-            if all(i == j for i, j in zip(self.moves[i:i+4], ["R", "U", "U", "L"])):
+            if all(i == j for i, j in zip(self.moves[i : i + 4], ["R", "U", "U", "L"])):
                 # get if the given point is an elevator made by us
-                r1, c1, dr1 = self.path[i+1]
-                r2, c2, dr2 = self.path[i+2]
+                r1, c1, dr1 = self.path[i + 1]
+                r2, c2, dr2 = self.path[i + 2]
                 if (r1, c1) in self.add_elevs and (r2, c2) in self.add_elevs:
                     # move elevator to the left (we need to recalculate strategy)
                     self.add_elevs.remove((r1, c1))
-                    self.add_elevs.add((r1, c1-1))
+                    self.add_elevs.add((r1, c1 - 1))
                     self.add_elevs.remove((r2, c2))
-                    self.add_elevs.add((r2, c2-1))
+                    self.add_elevs.add((r2, c2 - 1))
                     return True
-            elif all(i == j for i, j in zip(self.moves[i:i+4], ["L", "U", "U", "R"])):
+            elif all(
+                i == j for i, j in zip(self.moves[i : i + 4], ["L", "U", "U", "R"])
+            ):
                 # get if the given point is an elevator made by us
-                r1, c1, dr1 = self.path[i+1]
-                r2, c2, dr2 = self.path[i+2]
+                r1, c1, dr1 = self.path[i + 1]
+                r2, c2, dr2 = self.path[i + 2]
                 if (r1, c1) in self.add_elevs and (r2, c2) in self.add_elevs:
                     # move elevator to the right (we need to recalculate strategy)
                     self.add_elevs.remove((r1, c1))
-                    self.add_elevs.add((r1, c1+1))
+                    self.add_elevs.add((r1, c1 + 1))
                     self.add_elevs.remove((r2, c2))
-                    self.add_elevs.add((r2, c2+1))
+                    self.add_elevs.add((r2, c2 + 1))
                     return True
 
         return False
@@ -156,7 +172,9 @@ class MarvinSolver:
         """
         # The ones without elevator
         elev_levels = set([e[0] for e in self.add_elevs])
-        wo_levels = [i for i in range(self.n_rows) if i != self.ex_row and i not in elev_levels]
+        wo_levels = [
+            i for i in range(self.n_rows) if i != self.ex_row and i not in elev_levels
+        ]
 
         # BRUTE FORCE
         best_elev = (wo_levels[0], 0)
@@ -172,7 +190,7 @@ class MarvinSolver:
                     best_elev = (i, j)
                 self.add_elevs.remove((i, j))
 
-        print >> sys.stderr, "Best Elev =", best_elev, "Best Cost =",best_cost
+        print >> sys.stderr, "Best Elev =", best_elev, "Best Cost =", best_cost
         self.add_elevs.add(best_elev)
 
     def bfs_path(self):
@@ -181,8 +199,10 @@ class MarvinSolver:
         :return:
         """
         # max distance
-        self.distance = {(r, c, d): 15*15*100
-                         for r, c, d in product(range(self.n_rows), range(self.n_cols), ["R", "L"])}
+        self.distance = {
+            (r, c, d): 15 * 15 * 100
+            for r, c, d in product(range(self.n_rows), range(self.n_cols), ["R", "L"])
+        }
         prev = {}
         move = {}
         visited = set()
@@ -190,11 +210,12 @@ class MarvinSolver:
         self.distance[(self.st_row, self.st_col, "R")] = 0
 
         while queue:
-            #p = queue.pop(0)
+            # p = queue.pop(0)
             # TODO get the one with min distance - OPTIMIZE WITH HEAP
             mind = min(self.distance[p] for p in queue)
             i = 0
-            while self.distance[queue[i]] != mind: i+= 1
+            while self.distance[queue[i]] != mind:
+                i += 1
             p = queue.pop(i)
             r, c, dr = p
             if p in visited:
@@ -202,15 +223,23 @@ class MarvinSolver:
             visited.add(p)
             # neighbours
             ds = self.distance[p]
-            p_up = (r+1, c, dr)
+            p_up = (r + 1, c, dr)
             # there is an already-built elevator
-            if r < self.ex_row and (r, c) in self.elevs and ds + 1 < self.distance[p_up]:
+            if (
+                r < self.ex_row
+                and (r, c) in self.elevs
+                and ds + 1 < self.distance[p_up]
+            ):
                 self.distance[p_up] = ds + 1
                 prev[p_up] = p
                 move[p_up] = "U"
                 queue.append(p_up)
             # there is an add elevator (d + 3 turns until the next clone)
-            elif r < self.ex_row and (r, c) in self.add_elevs and ds + 4 < self.distance[p_up]:
+            elif (
+                r < self.ex_row
+                and (r, c) in self.add_elevs
+                and ds + 4 < self.distance[p_up]
+            ):
                 self.distance[p_up] = ds + 4
                 prev[p_up] = p
                 move[p_up] = "U"
@@ -218,14 +247,14 @@ class MarvinSolver:
             else:  # No elevator
                 if dr == "R":
                     # same direction
-                    p_right = (r, c+1, dr)
+                    p_right = (r, c + 1, dr)
                     if c < self.n_cols - 1 and ds + 1 < self.distance[p_right]:
                         self.distance[p_right] = ds + 1
                         prev[p_right] = p
                         move[p_right] = "R"
                         queue.append(p_right)
                     # opposite direction
-                    p_left = (r, c-1, "L")
+                    p_left = (r, c - 1, "L")
                     if c > 0 and ds + 4 < self.distance[p_left]:
                         self.distance[p_left] = ds + 4
                         prev[p_left] = p
@@ -233,22 +262,22 @@ class MarvinSolver:
                         queue.append(p_left)
                 elif dr == "L":
                     # same direction
-                    p_left = (r, c-1, dr)
+                    p_left = (r, c - 1, dr)
                     if c > 0 and ds + 1 < self.distance[p_left]:
                         self.distance[p_left] = ds + 1
                         prev[p_left] = p
                         move[p_left] = "L"
                         queue.append(p_left)
                     # opposite direction
-                    p_right = (r, c+1, "R")
+                    p_right = (r, c + 1, "R")
                     if c < self.n_cols - 1 and ds + 4 < self.distance[p_right]:
                         self.distance[p_right] = ds + 4
                         prev[p_right] = p
                         move[p_right] = "R"
                         queue.append(p_right)
-        #print >> sys.stderr, prev
+        # print >> sys.stderr, prev
         # reverse path
-        #"""
+        # """
         p_ex1 = (self.ex_row, self.ex_col, "R")
         p_ex2 = (self.ex_row, self.ex_col, "L")
         if p_ex1 in prev and p_ex2 in prev:
@@ -266,7 +295,7 @@ class MarvinSolver:
         while self.path[0] != (self.st_row, self.st_col, "R"):
             self.moves.insert(0, move[self.path[0]])
             self.path.insert(0, prev[self.path[0]])
-            #"""
+            # """
 
     def fill_strategy(self):
         # now go and fill strategy
@@ -297,6 +326,7 @@ class MarvinSolver:
             del self.strategy[(self.row, self.col, self.direction)]
         return move
 
+
 marvin = MarvinSolver()
 first = True
 while True:
@@ -309,9 +339,7 @@ while True:
         # start
         marvin.set_start()
 
-    print marvin.next_move()
-    print >> sys.stderr, marvin.path
-    print >> sys.stderr, marvin.moves
-    #print >> sys.stderr, pprint(marvin.distance)
-    print >> sys.stderr, marvin.strategy
-
+    print(marvin.next_move())
+    error(marvin.path)
+    error(marvin.moves)
+    error(marvin.strategy)

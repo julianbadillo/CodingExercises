@@ -8,6 +8,7 @@ B! = B x (B-1) x (B-2) x ... x 2 x 1.
 600K primes lower than 10^7 (10M)
 
 """
+from distutils.log import error
 import sys
 import math
 
@@ -44,9 +45,10 @@ def get_prime_power(x, prime):
         power *= prime
     return r
 
+
 a, b = [int(i) for i in raw_input().split()]
 
-# Write an action using print
+# Write an action using print()
 # To debug: print >> sys.stderr, "Debug messages..."
 
 a_factors = get_factors(a, {})
@@ -55,9 +57,9 @@ maxe = None
 for d in a_factors:
     b_factors[d] = get_prime_power(b, d)
 maxe = min(b_factors[d] / a_factors[d] for d in a_factors)
-print >> sys.stderr, a_factors
-print >> sys.stderr, b_factors
-print maxe
+error(a_factors)
+error(sys.stderr, b_factors)
+print(maxe)
 # Strategy 1: get prime divisors (and powers of ) A
 # O(sqrt(A)) - O(e^n/2)
 # pd = [ {d, p} ... ]   12 = [{2,2}, {3,1}]

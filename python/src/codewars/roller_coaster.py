@@ -1,3 +1,4 @@
+from distutils.log import error
 import sys
 import math
 
@@ -34,8 +35,8 @@ while i < rides:
     i += 1
 
     if pos1 in money_history:
-        print >> sys.stderr, "Cycle found", pos1, i, money
-        print >> sys.stderr, "History:", rides_history[pos1], money_history[pos1]
+        error("Cycle found", pos1, i, money)
+        error("History:", rides_history[pos1], money_history[pos1])
         remaining = rides - i
         delta_money = money - money_history[pos1]
         delta_rides = i - rides_history[pos1]
@@ -50,4 +51,4 @@ while i < rides:
         rides_history[pos1] = i
 
 
-print money
+print(money)
