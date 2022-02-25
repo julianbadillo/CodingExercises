@@ -1,7 +1,7 @@
 from advent_day4 import *
 
 def test_load_bingos():
-    lines = read_file("test/advent_day4_test.txt")
+    lines = read_file("./data/adventofcode2021/advent_day4_test.txt")
     numbers = [int(x) for x in lines[0].split(",") if x]
     bingos = load_bingos(lines[1:])
     for b in bingos:
@@ -92,7 +92,7 @@ def test_mark_nubmer_bingo_row2():
 
 
 def test_play_game():
-    lines = read_file("test/advent_day4_test.txt")
+    lines = read_file("./data/adventofcode2021/advent_day4_test.txt")
     numbers = [int(x) for x in lines[0].split(",") if x]
     bingos = load_bingos(lines[1:])
     (i, res) = play_game(numbers, bingos)
@@ -102,7 +102,7 @@ def test_play_game():
 
 
 def test_play_game_final():
-    lines = read_file("test/advent_day4.txt")
+    lines = read_file("./data/adventofcode2021/advent_day4.txt")
     numbers = [int(x) for x in lines[0].split(",") if x]
     bingos = load_bingos(lines[1:])
     (i, res) = play_game(numbers, bingos)
@@ -112,7 +112,7 @@ def test_play_game_final():
 
 
 def test_play_game_looser():
-    lines = read_file("test/advent_day4_test.txt")
+    lines = read_file("./data/adventofcode2021/advent_day4_test.txt")
     numbers = [int(x) for x in lines[0].split(",") if x]
     bingos = load_bingos(lines[1:])
     (i, res) = play_game_loser(numbers, bingos)
@@ -121,7 +121,7 @@ def test_play_game_looser():
     assert i == 13
 
 def test_play_game_looser_final():
-    lines = read_file("test/advent_day4.txt")
+    lines = read_file("./data/adventofcode2021/advent_day4.txt")
     numbers = [int(x) for x in lines[0].split(",") if x]
     bingos = load_bingos(lines[1:])
     (i, res) = play_game_loser(numbers, bingos)

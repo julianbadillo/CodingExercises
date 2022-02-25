@@ -15,7 +15,7 @@ def test_process_template():
     assert cc['H']== 1
 
 def test_transform_count():
-    template, rules = read_file("test/advent_day14_test.txt")
+    template, rules = read_file("data/adventofcode2021/advent_day14_test.txt")
     cp, cc = process_template(template)
     # NNCB
     print(cp)
@@ -61,7 +61,7 @@ def test_transform_count():
 
 
 def test_transform_count2():
-    template, rules = read_file("test/advent_day14_test.txt")
+    template, rules = read_file("data/adventofcode2021/advent_day14_test.txt")
     cp, cc = process_template(template)
     # NNCB
     cp = transform_count_maps(cp, cc, rules)
@@ -82,7 +82,7 @@ def test_transform_count2():
     assert cc == cc4
 
 def test_all_test():
-    template, rules = read_file("test/advent_day14_test.txt")
+    template, rules = read_file("data/adventofcode2021/advent_day14_test.txt")
     cp, cc = process_template(template)
     for i in range(40):
         cp = transform_count_maps(cp, cc, rules)
@@ -92,7 +92,7 @@ def test_all_test():
     assert mn == 3849876073
 
 def test_all_test():
-    template, rules = read_file("test/advent_day14.txt")
+    template, rules = read_file("data/adventofcode2021/advent_day14.txt")
     cp, cc = process_template(template)
     for i in range(40):
         cp = transform_count_maps(cp, cc, rules)

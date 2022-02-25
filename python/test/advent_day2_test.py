@@ -8,7 +8,7 @@ def test_read_file():
                 ['up', '3'],
                 ['down', '8'],
                 ['forward', '2'],]
-    actual = read_file('./test/advent_day2_test.txt')
+    actual = read_file('./data/adventofcode2021/advent_day2_test.txt')
     assert expected == actual
 
 def test_calc_position():
@@ -23,13 +23,13 @@ def test_calc_position():
     assert expected == actual
 
 def test_all_part1_testdata():
-    input = read_file('./test/advent_day2_test.txt')
+    input = read_file('./data/adventofcode2021/advent_day2_test.txt')
     expected = (15, 10)
     actual = calculate_final_position(input)
     assert expected == actual
 
 def test_all_part1():
-    input = read_file('./test/advent_day2.txt')
+    input = read_file('./data/adventofcode2021/advent_day2.txt')
     expected = (1940, 861)
     actual = calculate_final_position(input)
     print(f"{actual} = {actual[0] * actual[1]}")
@@ -47,7 +47,7 @@ def test_calc_position_aim():
     assert expected == actual
 
 def test_all_part2():
-    input = read_file('./test/advent_day2.txt')
+    input = read_file('./data/adventofcode2021/advent_day2.txt')
     expected = (1940, 1007368)
     actual = calculate_final_position_aim(input)
     print(f"{actual} = {actual[0] * actual[1]}")

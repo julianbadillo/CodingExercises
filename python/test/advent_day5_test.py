@@ -47,26 +47,26 @@ def test_mark_map2():
                     [0, 0, 0, 0, 0],]
 
 def test_overlap_hv_test():
-    lines = read_file("test/advent_day5_test.txt")
+    lines = read_file("./data/adventofcode2021/advent_day5_test.txt")
     vents = load_vents(lines)
     s = overlap_hv(vents)
     assert s == 5
 
 def test_overlap_hv():
-    lines = read_file("test/advent_day5.txt")
+    lines = read_file("./data/adventofcode2021/advent_day5.txt")
     vents = load_vents(lines)
     s = overlap_hv(vents)
     assert s == 5124
 
 
 def test_overlap_test():
-    lines = read_file("test/advent_day5_test.txt")
+    lines = read_file("./data/adventofcode2021/advent_day5_test.txt")
     vents = load_vents(lines)
     s = overlap_hv(vents)
     assert s == 12
 
 def test_overlap():
-    lines = read_file("test/advent_day5.txt")
+    lines = read_file("./data/adventofcode2021/advent_day5.txt")
     vents = load_vents(lines)
     s = overlap_hv(vents)
     assert s == 19771
