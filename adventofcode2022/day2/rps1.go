@@ -13,7 +13,7 @@ func score_round(player1 int, player2 int) (int, int, int) {
 	//3 = scissors
 	if player1 == player2 {
 		outcome = 2
-	} else if (player1 % 3) == ((player2 + 1) % 3)  {
+	} else if (player1 % 3) == ((player2 + 1) % 3) {
 		outcome = 1
 	} else {
 		outcome = 3
@@ -60,13 +60,12 @@ func follow_strategy_part2(strategy []string) int {
 		}
 		result, _, score2 := score_round(player1, player2)
 		if result != outcome {
-			panic("!!!!")	
+			panic("!!!!")
 		}
 		total_score_p2 += score2
 	}
 	return total_score_p2
 }
-
 
 func main() {
 	data := make([]string, 0)
