@@ -11,3 +11,7 @@
 ## Leaderboard
 
 To sign up to leaderboard, go to leaderboard and join using this code: `847270-e4da1da9`
+
+## SubReddit
+
+Check discussion and other's solutions: <https://www.reddit.com/r/adventofcode/>
