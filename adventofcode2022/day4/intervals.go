@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Range struct {
@@ -21,17 +22,17 @@ func (r1 Range) Overlaps(r2 Range) bool {
 	return (r1.first <= r2.first && r2.first <= r1.last) || (r1.first <= r2.last && r2.last <= r1.last)
 }
 
-func parse_line(line string) (Range, Range) {
-	arr := strings.Split(line, ",")
-	p1 := strings.Split(arr[0], "-")
-	p2 := strings.Split(arr[1], "-")
-	f1, _ := strconv.Atoi(p1[0])
-	l1, _ := strconv.Atoi(p1[1])
-	f2, _ := strconv.Atoi(p2[0])
-	l2, _ := strconv.Atoi(p2[1])
-	return Range{f1, l1}, Range{f2, l2}
+func NewRange(s string) Range {
+	p := strings.Split(s, "-")
+	f, _ := strconv.Atoi(p[0])
+	l, _ := strconv.Atoi(p[1])
+	return Range{f, l}
 }
 
+func parse_line(line string) (Range, Range) {
+	arr := strings.Split(line, ",")
+	return NewRange(arr[0]),  NewRange(arr[1])
+}
 
 func count_contained_and_overlaps(data []string) (int, int) {
 	contained, overlapped := 0, 0
@@ -49,6 +50,7 @@ func count_contained_and_overlaps(data []string) (int, int) {
 }
 
 func main() {
+	tstart := time.Now()
 	data := make([]string, 0)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
@@ -57,4 +59,5 @@ func main() {
 	result1, result2 := count_contained_and_overlaps(data)
 	fmt.Printf("Total contained: %v\n", result1)
 	fmt.Printf("Total overlaps: %v\n", result2)
+	fmt.Printf("%s elapsed\n", time.Since(tstart))
 }
