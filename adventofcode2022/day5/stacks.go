@@ -87,7 +87,7 @@ func processStacks2(stacks [][]string, instructs []Instruct) [][]string {
 		blocks := stacks[inst.from][s-inst.move : s]
 		stacks[inst.from] = stacks[inst.from][:s-inst.move]
 		stacks[inst.to] = append(stacks[inst.to], blocks...)
-		printStacks(stacks)
+		// printStacks(stacks)
 	}
 	return stacks
 }
