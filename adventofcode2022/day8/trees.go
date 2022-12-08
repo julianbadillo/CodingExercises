@@ -50,7 +50,7 @@ func countVisible(data [][]int) int {
 	count := 0
 	
 	for _, move := range moves {
-		for i := 0; true; i++ {
+		for i := 0; i < R || i < C; i++ {
 			maxi := -1
 			for j := 0; true; j++ {
 				if r, c := move.r + i*move.dr2 + j*move.dr, move.c + i*move.dc2 + j*move.dc
