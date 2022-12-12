@@ -15,12 +15,10 @@ func main() {
 		data = append(data, scanner.Text())
 	}
 	s, e := findStartEnd(data)
-	fmt.Println(s, e)
 	fmt.Println("Part one")
-	fmt.Println(findPath(data, s, e))
+	fmt.Println(findPath(data, s, e, false))
 	fmt.Println("Part two")
-	starts := findAllStarts(data)
-	fmt.Println(findBestPath(data, starts, e))
+	fmt.Println(findPath(data, e, s, true))
 	fmt.Printf("%s elapsed\n", time.Since(tstart))
 }
 
@@ -28,12 +26,12 @@ type Pos struct {
 	r, c int
 }
 
-func findStartEnd(data []string) (Pos, Pos){
+func findStartEnd(data []string) (Pos, Pos) {
 	R, C := len(data), len(data[0])
 	var start, end Pos
-	for r:=0; r<R;r++ {
-		for c:=0; c<C;c++{
-			if data[r][c:c+1] == "S"{
+	for r := 0; r < R; r++ {
+		for c := 0; c < C; c++ {
+			if data[r][c:c+1] == "S" {
 				start.r, start.c = r, c
 			} else if data[r][c:c+1] == "E" {
 				end.r, end.c = r, c
@@ -43,43 +41,35 @@ func findStartEnd(data []string) (Pos, Pos){
 	return start, end
 }
 
-func findAllStarts(data []string) []Pos{
-	R, C := len(data), len(data[0])
-	starts := make([]Pos, 0)
-	for r:=0; r<R;r++ {
-		for c:=0; c<C;c++{
-			if data[r][c:c+1] == "S" || data[r][c:c+1] == "a"{
-				starts = append(starts, Pos{r, c})
-			}
-		}
-	}
-	return starts
+var moves = []Pos{
+	{1, 0},
+	{0, 1},
+	{-1, 0},
+	{0, -1},
 }
 
-var moves = [] Pos{
-	{1,0},
-	{0,1},
-	{-1,0},
-	{0,-1},
-}
-
-func findPath(data []string, start, end Pos) int {
+func findPath(data []string, start, end Pos, reverse bool) int {
 	R, C := len(data), len(data[0])
 	distance := make(map[Pos]int)
 	height := make(map[Pos]int)
 	distance[start] = 0
-	
-	queue := make([]Pos, 0)
-	queue = append(queue, start)
-	
+
 	for r, line := range data {
 		for c, char := range line {
-			height[Pos{r, c}] = int(char)
+			switch char {
+			case 'S':
+				height[Pos{r, c}] = int('a')
+			case 'E':
+				height[Pos{r, c}] = int('z')
+			default:
+				height[Pos{r, c}] = int(char)
+			}
+
 		}
 	}
-	height[start] = int('a')
-	height[end] = int('z')
-	
+
+	queue := make([]Pos, 0)
+	queue = append(queue, start)
 
 	for len(queue) > 0 {
 		pos := queue[0]
@@ -94,13 +84,19 @@ func findPath(data []string, start, end Pos) int {
 				continue
 			}
 			// no adjacent
-			if height[pos] + 1 < height[pos2] {
+			if !reverse && height[pos]+1 < height[pos2] {
+				continue
+			} else if reverse && height[pos2]+1 < height[pos] {
 				continue
 			}
+			// already visited
 			if _, found := distance[pos2]; found {
 				continue
 			}
-			if pos2 == end {
+			// reached the end
+			if !reverse && pos2 == end {
+				return d + 1
+			} else if reverse && height[pos2] == height[end] {
 				return d + 1
 			}
 			distance[pos2] = d + 1
@@ -108,18 +104,4 @@ func findPath(data []string, start, end Pos) int {
 		}
 	}
 	return -1
-}
-
-func findBestPath(data []string, starts []Pos, end Pos) int {
-	minpath := -1
-	for _, p := range starts {
-		d := findPath(data, p, end)
-		fmt.Printf("From %v d=%v\n", p, d)
-		if minpath == -1 {
-			minpath = d
-		} else if d != -1 && d < minpath {
-			minpath = d
-		}
-	}
-	return minpath
 }
