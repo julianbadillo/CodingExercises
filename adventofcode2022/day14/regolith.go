@@ -17,7 +17,7 @@ func main() {
 	for scanner.Scan() {
 		data = append(data, scanner.Text())
 	}
-	//solutionPart1(data)
+	solutionPart1(data)
 	solutionPart2(data)
 	fmt.Printf("%s elapsed\n", time.Since(tstart))
 }
