@@ -108,8 +108,8 @@ func calculateDistance(graph map[string]*Valve) map[string]int {
 			queue = queue[:len(queue)-1] // pop
 			d := dist[start+"->"+node]
 			for _, node2 := range graph[node].adj {
-				// if distance already known
-				if _, found := dist[start+"->"+node2]; found {
+				// if distance already known - and shorter path already known
+				if d2, found := dist[start+"->"+node2]; found && d2 < d + 1{
 					continue
 				}
 				dist[start+"->"+node2] = d + 1
@@ -146,7 +146,7 @@ func findBestPathRec(graph map[string]*Valve, dist map[string]int, goodValves []
 			continue
 		}
 		// time out
-		if time-d-1 < 0 {
+		if time - d - 1 < 0 {
 			continue
 		}
 		// open already - don't go there
