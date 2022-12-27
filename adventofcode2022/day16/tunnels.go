@@ -70,8 +70,8 @@ func calculateDistance(graph map[string]*Valve) map[string]int {
 		dist[start+"->"+start] = 0
 		queue = append(queue, start)
 		for len(queue) > 0 {
-			node := queue[len(queue)-1]
-			queue = queue[:len(queue)-1] // pop
+			node := queue[0]
+			queue = queue[1:] // pop
 			d := dist[start+"->"+node]
 			for _, node2 := range graph[node].adj {
 				// if distance already known - and shorter path already known
