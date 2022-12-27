@@ -32,33 +32,6 @@ func (v *Valve) Print() {
 	fmt.Printf("(%v, %v) -> %v\n", v.name, v.flow, v.adj)
 }
 
-func rangeSlice(n int) []int {
-	xs := make([]int, n)
-	for i := 0; i < len(xs); i++ {
-		xs[i] = i
-	}
-	return xs
-}
-
-// Perm calls f with each permutation of a.
-func Perm(a []int, f func([]int)) {
-	perm(a, f, 0)
-}
-
-// Permute the values at index i to len(a)-1.
-func perm(a []int, f func([]int), i int) {
-	if i > len(a) {
-		f(a)
-		return
-	}
-	perm(a, f, i+1)
-	for j := i + 1; j < len(a); j++ {
-		a[i], a[j] = a[j], a[i]
-		perm(a, f, i+1)
-		a[i], a[j] = a[j], a[i]
-	}
-}
-
 func solutionPart1(data []string) {
 	graph := parseTunnels(data)
 	for _, v := range graph {
@@ -116,7 +89,6 @@ func calculateDistance(graph map[string]*Valve) map[string]int {
 				queue = append(queue, node2)
 			}
 		}
-
 	}
 	return dist
 }
