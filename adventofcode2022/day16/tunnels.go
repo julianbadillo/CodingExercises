@@ -17,8 +17,11 @@ func main() {
 	for scanner.Scan() {
 		data = append(data, scanner.Text())
 	}
-	solutionPart1(data)
-	//solutionPart2(data)
+	graph := parseTunnels(data)
+	// precalculate distances
+	dist := calculateDistance(graph)
+	solutionPart1(graph, dist)
+	solutionPart2(graph, dist)
 	fmt.Printf("%s elapsed\n", time.Since(tstart))
 }
 
@@ -32,12 +35,19 @@ func (v *Valve) Print() {
 	fmt.Printf("(%v, %v) -> %v\n", v.name, v.flow, v.adj)
 }
 
-func solutionPart1(data []string) {
-	graph := parseTunnels(data)
-	for _, v := range graph {
-		v.Print()
-	}
-	findBestPath(graph)
+func solutionPart1(graph map[string]*Valve, dist map[string]int) {
+	// only valves that have non-zero flow
+	goodValves := goodValves(graph)
+	// for _, v := range goodValves {
+	// 	fmt.Printf("%v\t%v\n", v, graph[v].flow)
+	// }
+	// for n, d := range dist {
+	// 	fmt.Printf("%v [%v]\n", n, d)
+	// }
+	// Try recursion
+	time := 30
+	maxPressure := findBestPathRec(graph, dist, goodValves, make(map[string]int), time, "AA")
+	fmt.Printf("MaxPressure %v\n", maxPressure)
 }
 
 func parseTunnels(data []string) map[string]*Valve {
@@ -51,23 +61,6 @@ func parseTunnels(data []string) map[string]*Valve {
 		graph[name] = &Valve{name, flow, adj}
 	}
 	return graph
-}
-
-func findBestPath(graph map[string]*Valve) {
-	// only valves that have non-zero flow
-	goodValves := goodValves(graph)
-	for _, v := range goodValves {
-		fmt.Printf("%v\t%v\n", v, graph[v].flow)
-	}
-	// precalculate distance all to all
-	dist := calculateDistance(graph)
-	// for n, d := range dist {
-	// 	fmt.Printf("%v [%v]\n", n, d)
-	// }
-	// Try recursion
-	time := 30
-	maxPressure := findBestPathRec(graph, dist, goodValves, make(map[string]int), time, "AA")
-	fmt.Printf("MaxPressure %v\n", maxPressure)
 }
 
 func calculateDistance(graph map[string]*Valve) map[string]int {
@@ -109,7 +102,7 @@ func findBestPathRec(graph map[string]*Valve, dist map[string]int, goodValves []
 	//fmt.Printf("Node %v time %v\n", node, time)
 	maxPressure := 0
 	if len(open) == len(goodValves) {
-		printSolution(graph, open)
+		//totalPressure(graph, open)
 		return 0
 	}
 	for _, node2 := range goodValves {
@@ -132,17 +125,45 @@ func findBestPathRec(graph map[string]*Valve, dist map[string]int, goodValves []
 			maxPressure = pressure
 		}
 	}
-	if maxPressure == 0 {
-		printSolution(graph, open)
-	}
+	// if maxPressure == 0 {
+	// 	totalPressure(graph, open)
+	// }
 	return maxPressure
 }
 
-func printSolution(graph map[string]*Valve, open map[string]int) {
+func totalPressure(graph map[string]*Valve, open map[string]int) int {
 	r := 0
 	for k, t := range open {
 		fmt.Printf("%v [%v],", k, t)
 		r += graph[k].flow * t
 	}
 	fmt.Printf("total=%v\n", r)
+	return r
+}
+
+func solutionPart2(graph map[string]*Valve, dist map[string]int) {
+	maxPressure := 0
+	time := 26
+	// only valves that have non-zero flow
+	goodValves := goodValves(graph)
+	limit := 1 << (len(goodValves) - 1) // you only need half -> 1000 is the same as 0111
+	for i := 0; i < limit ; i++ {
+		// split the valves between you and elephant
+		valves1, valves2 := make([]string, 0), make([]string, 0)
+		k := i
+		for _, v := range goodValves {
+			if k % 2 == 0 {
+				valves1 = append(valves1, v)
+			} else {
+				valves2 = append(valves2, v)
+			}
+			k>>=1
+		}
+		pressure1 := findBestPathRec(graph, dist, valves1, make(map[string]int), time, "AA")
+		pressure2 := findBestPathRec(graph, dist, valves2, make(map[string]int), time, "AA")
+		if pressure1 + pressure2 > maxPressure {
+			maxPressure = pressure1 + pressure2
+		}
+	}
+	fmt.Printf("Max Pressure %v\n", maxPressure)
 }
