@@ -6,21 +6,21 @@ import (
 	"os"
 )
 
-func char_val(c byte) int {
+func charVal(c byte) int {
 	if 'a' <= c && c <= 'z' {
 		return int(c - 'a')
 	}
 	return int(c - 'A') + 26
 }
 
-func line_prio(sack1 string, sack2 string) int {
+func linePrio(sack1 string, sack2 string) int {
 	var let1 [52]bool
 	var let2 [52]bool
 	for i := 0; i < len(sack1); i++ {
-		c1, c2 := char_val(sack1[i]), char_val(sack2[i])
-		let1[c1] = true
-		let2[c2] = true
+		let1[charVal(sack1[i])] = true
+		let2[charVal(sack2[i])] = true
 	}
+	// intersection
 	for i := 0; i < 52; i++ {
 		if let1[i] && let2[i] {
 			return i + 1
@@ -29,21 +29,21 @@ func line_prio(sack1 string, sack2 string) int {
 	return 0
 }
 
-func add_rucksacks(data []string) int {
+func addRucksacks(data []string) int {
 	prio_sum := 0
 	for _, line := range data {
 		n := len(line)
 		//fmt.Printf("Line '%v' length %v n/2 %v\n", line, n, n/2)
-		prio_sum += line_prio(line[0:n/2], line[n/2:n])
+		prio_sum += linePrio(line[0:n/2], line[n/2:n])
 	}
 	return prio_sum
 }
 
-func find_badge(elves []string) int {
+func findBadge(elves []string) int {
 	var lets [3][52]bool
 	for i, elf := range elves {
 		for _, c := range elf {
-			lets[i][char_val(byte(c))] = true
+			lets[i][charVal(byte(c))] = true
 		}
 	}
 	for i := 0; i < 52; i++ {
@@ -54,10 +54,10 @@ func find_badge(elves []string) int {
 	return 0
 }
 
-func add_badges(data []string) int {
+func addBadges(data []string) int {
 	badge_sum := 0
 	for i := 0; i < len(data); i += 3 {
-		badge_sum += find_badge(data[i:i+3])
+		badge_sum += findBadge(data[i:i+3])
 	}
 	return badge_sum
 }
@@ -68,8 +68,8 @@ func main() {
 	for scanner.Scan() {
 		data = append(data, scanner.Text())
 	}
-	result := add_rucksacks(data)
+	result := addRucksacks(data)
 	fmt.Printf("Total rucksacks: %v\n", result)
-	result = add_badges(data)
+	result = addBadges(data)
 	fmt.Printf("Total badges: %v\n", result)
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"adventofcode2022/day18/utils"
 	"bufio"
 	"fmt"
 	"math"
@@ -27,8 +28,11 @@ type Cube struct {
 	x, y, z int
 }
 
+// True if a cube touches the other cube
 func (cube1 Cube) Touch(cube2 Cube) bool {
-	return Abs(cube1.x - cube2.x) + Abs(cube1.y - cube2.y) + Abs(cube1.z - cube2.z) == 1
+	return utils.Abs(cube1.x-cube2.x)+
+		utils.Abs(cube1.y-cube2.y)+
+		utils.Abs(cube1.z-cube2.z) == 1
 }
 
 func parseCubes(data []string) []Cube {
@@ -43,7 +47,7 @@ func parseCubes(data []string) []Cube {
 	return cubes
 }
 
-func solutionPart1(cubes[] Cube) {
+func solutionPart1(cubes []Cube) {
 	surface := 0
 	for _, cube1 := range cubes {
 		surface += 6
@@ -59,7 +63,7 @@ func solutionPart1(cubes[] Cube) {
 	fmt.Printf("Surface %v\n", surface)
 }
 
-var moves =  [][]int{
+var moves = [][]int{
 	{1, 0, 0},
 	{-1, 0, 0},
 	{0, 1, 0},
@@ -68,13 +72,13 @@ var moves =  [][]int{
 	{0, 0, -1},
 }
 
-func solutionPart2(cubes[] Cube) {
+func solutionPart2(cubes []Cube) {
 	surface := 0
 	lava := make(map[Cube]bool, 0)
 	for _, cube := range cubes {
 		lava[cube] = true
 	}
-	
+
 	minx, miny, minz, maxx, maxy, maxz := minMaxCoords(cubes)
 	// increase the borders to flood.
 	minx--
@@ -88,7 +92,7 @@ func solutionPart2(cubes[] Cube) {
 	outside[Cube{minx, miny, minz}] = true
 	queue := make([]Cube, 0)
 	queue = append(queue, Cube{minx, miny, minz})
-	for ; len(queue) > 0 ; {
+	for len(queue) > 0 {
 		cube := queue[0]
 		queue = queue[1:]
 		for _, move := range moves {
@@ -128,14 +132,7 @@ func solutionPart2(cubes[] Cube) {
 	fmt.Printf("Surface %v\n", surface)
 }
 
-func Abs(x int) int {
-	if x >= 0 {
-		return x
-	}
-	return -x
-}
-
-func minMaxCoords(cubes[] Cube) (minx, miny, minz, maxx, maxy, maxz int) {
+func minMaxCoords(cubes []Cube) (minx, miny, minz, maxx, maxy, maxz int) {
 	minx, miny, minz = math.MaxInt64, math.MaxInt64, math.MaxInt64
 	maxx, maxy, maxz = math.MinInt64, math.MinInt64, math.MinInt64
 	for _, c := range cubes {

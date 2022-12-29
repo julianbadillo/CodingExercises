@@ -9,34 +9,32 @@ import (
 	"time"
 )
 
+var (
+	data []string
+	root *Node
+)
+
 func main() {
 	tstart := time.Now()
-	data := make([]string, 0)
+	data = make([]string, 0)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		data = append(data, scanner.Text())
 	}
-	root := parseOutput(data)
+	x := parseOutput()
+	root = &x
 	//fmt.Println("-------------------")
 	//root.print("")
-	updateSize(&root)
+	updateSize(root)
 	//fmt.Println("-------------------")
 	//root.print("")
-	fmt.Printf("Total size %v\n", sumSizes(&root, 100000))
+	fmt.Printf("Total size %v\n", sumSizes(root, 100000))
 	freeSpace := 70000000 - root.size
 	neededSpace := 30000000 - freeSpace
-	node := smallestToDelete(&root, neededSpace)
+	node := smallestToDelete(neededSpace)
 	fmt.Printf("Smallest to delete %v\n", node.size)
 	fmt.Printf("%s elapsed\n", time.Since(tstart))
 
-}
-
-type Node struct {
-	name     string
-	dir      bool
-	size     int
-	parent   *Node
-	children []*Node
 }
 
 func (node Node) getChild(name string) *Node {
@@ -51,11 +49,11 @@ func (node Node) getChild(name string) *Node {
 func (node Node) print(d string) {
 	fmt.Printf("%v%v [%v]\n", d, node.name, node.size)
 	for _, child := range node.children {
-		child.print(d +"  ")
+		child.print(d + "  ")
 	}
 }
 
-func parseOutput(data []string) Node {
+func parseOutput() Node {
 	root := Node{name: "/", dir: true, children: make([]*Node, 0)}
 	currentNode := &root
 	listing := false
@@ -69,7 +67,7 @@ func parseOutput(data []string) Node {
 				currentNode = currentNode.parent
 			} else if line[0:4] == "$ cd" {
 				currentNode = currentNode.getChild(line[5:])
-			}  else if line == "$ ls" {
+			} else if line == "$ ls" {
 				listing = true
 			}
 		} else if listing {
@@ -84,7 +82,7 @@ func parseOutput(data []string) Node {
 				currentNode.children = append(currentNode.children, &newNode)
 			}
 		}
-		
+
 	}
 	return root
 }
@@ -96,12 +94,12 @@ func updateSize(node *Node) int {
 			size += updateSize(child)
 		}
 		node.size = size
-	} 
-	return node.size	
+	}
+	return node.size
 }
 
 func sumSizes(root *Node, threshold int) int {
-	queue := make([]*Node,0)
+	queue := make([]*Node, 0)
 	queue = append(queue, root)
 	totalSum := 0
 	for len(queue) > 0 {
@@ -117,9 +115,9 @@ func sumSizes(root *Node, threshold int) int {
 	return totalSum
 }
 
-func smallestToDelete(root *Node, needed int) *Node {
+func smallestToDelete(needed int) *Node {
 	var minNode *Node
-	queue := make([]*Node,0)
+	queue := make([]*Node, 0)
 	queue = append(queue, root)
 	for len(queue) > 0 {
 		node := queue[0]
