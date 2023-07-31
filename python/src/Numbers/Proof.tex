@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\title{Your Paper}
+\author{You}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Your abstract.
+\end{abstract}
+
+\section{Un Ejercicio...}
+
+Puede usted calcular la siguiente cantidad?
+$$2^{2^{2006}} \bmod{p} \equiv ?$$
+
+Tal vez a primera vista uno pensaría en calcular el exponente $2^{2006}$ 
+y después $2^{2^{2006}}$ para, como última operación calcular el módulo.\\
+
+Sin embargo si hacemos el cálculo de esta manera vamos a ver que:
+$$ 2 ^{2006} = 73480364497552289550901324875371646977428332933676492830569135156...$$... Un número de 2006 bits.\\
+Si tratamos de hacer 2 elevado a ese número, será un número tan grande que no
+nos cabrá en la memoria de ningún computador (probablemente no quepa en la
+memoria de todos los computadores del planeta combinados).\\
+Cómo podríamos reducir este exponente para calcularlo más fácil? Para esto vamos
+a usar el pequeño Teorema de Fermat, observe a continuación.\\
+\paragraph{Pequeño Teorema de Fermat:}
+	Sea $p$ un número primo. Se tiene que para cualquier $a$, entero positivo:
+    $$a^{p-1} \equiv 1 \bmod{p}$$
+
+\section{Conjetura}
+Ahora, el Pequeño Teorema de Fermat no nos sirve directamente para calcular el
+resultado, por lo cuál vamos a plantear una conjetura:
+
+\paragraph{Conjetura} Sea $p$ un número primo y $a$, $b$ dos números enteros. Se
+tiene que:
+$$a^{b} \equiv a^{b \bmod{p-1}} \bmod{p}$$
+
+Ahora, esta conjetura nos serviría para calcular el resultado que queremos porque
+hacer una operación modular antes de hacer el exponente es más práctico.\\
+Sin embargo para poder usarlo, tenemos que demostrarlo.
+
+\section{Demostración}
+
+Partamos de la conjetura que queremos demostrar:
+$$a^{b} \equiv a^{b \bmod{p-1}} \bmod{p}$$
+Sabemos que al hacer $b \bmod{p-1}$, en realidad estamos haciendo el residuo de
+una división entera. Este residuo lo podemos expresar como:
+$$b \mod{p-1} = b - k\cdot(p-1)$$
+Donde $k$ es un entero positivo.\\
+Si reemplazamos este resultado en nuestra conjetura:
+$$a^{b} \equiv a^{b - k\cdot(p-1)} \bmod{p}$$
+Multiplicando por $a^{k\cdot(p-1)}$ ambos lados de la ecuación:
+$$a^{b} \cdot a^{k\cdot(p-1)} \equiv a^{b - k\cdot(p-1)} \cdot a^{k\cdot(p-1)} \bmod{p}$$
+Ahora es cuestión de manipular algebráicamente
+$$a^{b + k\cdot(p-1)} \equiv a^{b - k\cdot(p-1) + k\cdot(p-1)} \bmod{p}$$
+$$a^{b + k\cdot(p-1)} \equiv a^{b} \bmod{p}$$
+$$a^{b} \cdot (a^{p-1})^k \equiv a^{b} \bmod{p}$$
+Y aquí viene donde usamos el teorema de Fermat, para eliminar $a^{p-1}$
+$$a^{b} \cdot (1)^k \equiv a^{b} \bmod{p}$$
+$$a^{b} \cdot 1 \equiv a^{b} \bmod{p}$$
+Lo cual es evidentemente cierto.
+\end{document}
