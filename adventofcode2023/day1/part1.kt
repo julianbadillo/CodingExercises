@@ -3,21 +3,15 @@ import java.io.BufferedReader
 
 fun main(args: Array<String>) {
     val reader: BufferedReader = File(args[0]).bufferedReader()
-    val lines = mutableListOf<String>()
-    reader.forEachLine { lines.add(it) }
-    var total = 0
-    for(line in lines){
-        total += getNumber(line)
-    }
-    print(total)
+    val lines = reader.readLines()
+    // map-reduce
+    var total = lines.map { getNumber(it) }.sum()
+    println(total)
 }
 
+/* Get the 2-digit number from the first and last digit on the string */
 fun getNumber(line: String): Int {
-    val ints = mutableListOf<Int>()
-    for (i in 0..line.length-1) {
-        if(line[i] >= '0' && line[i] <= '9'){
-            ints.add(line[i].code - '0'.code)
-        }
-    }
+    // filter - then map
+    val ints = line.filter{ it >= '0' && it <= '9' }.map{ it.code - '0'.code }
     return ints.first() * 10 + ints.last()
 }

@@ -4,13 +4,11 @@ import java.io.BufferedReader
 fun main(args: Array<String>) {
     val reader: BufferedReader = File(args[0]).bufferedReader()
     val lines = mutableListOf<String>()
+    // javascript-like iterator
     reader.forEachLine { lines.add(it) }
-    var total = 0
-    for(line in lines){
-        total += getNumber(line)
-        println(getNumber(line))
-    }
-    print(total)
+    // map-reduce
+    var total = lines.map { getNumber(it) }.sum()
+    println(total)
 }
 
 /* Get the number from first and last digit in the line
@@ -28,20 +26,23 @@ fun getNumber(line: String): Int {
     //"zero" to 0
     )
     val ints = mutableListOf<Int>()
-    for (i in 0..line.length-1) {
+    for (i in 0 until line.length) {
         // if a number
         if(line[i] >= '0' && line[i] <= '9'){
             ints.add(line[i].code - '0'.code)
         } else {
             // look for word digits
-            for(size in 3..5){
+            for (size in 3..5) {
                 // size fits
-                if(i + size <= line.length && numbers.containsKey(line.substring(i, i+size))){
-                    val number: Int = numbers[line.substring(i, i+size)] as Int
-                    ints.add(number)
+                if (i + size <= line.length && numbers.containsKey(line.substring(i, i + size))) {
+                    val n = numbers[line.substring(i, i + size)]
+                    if (n != null) {
+                        ints.add(n)
+                    }
                 }
             }
         }
     }
+    //println(ints)
     return ints.first() * 10 + ints.last()
 }
