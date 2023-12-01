@@ -1,1 +1,5 @@
 *.txt
+*.jar
+*.class
+*.devcontainer
+*META-INF
