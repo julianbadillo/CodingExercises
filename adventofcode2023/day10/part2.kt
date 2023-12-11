@@ -78,7 +78,7 @@ fun tilesEnclosed(maze: List<String>) {
     }
     // find a second pipe
     val path = mutableListOf<P>()
-    var next: P = start 
+    var next: P
     for (dir in listOf(S, E, N, W)) {
         next = start + dir
         if (!next.inBounds(R, C)) {
@@ -142,10 +142,15 @@ fun tilesEnclosed(maze: List<String>) {
                 // crossing a vertical pipe
                 if (map[r][c] == '|') {
                     isIn = !isIn    
+                    map[r][c] = '│'
                 } else if (map[r][c] == '-') {
-                    continue
-                } else if (map[r][c] == 'L' || map[r][c] == 'F') {
+                    map[r][c] = '─'
+                } else if (map[r][c] == 'L') {
                     lastCross = map[r][c]
+                    map[r][c] = '└'
+                } else if (map[r][c] == 'F') {
+                    lastCross = map[r][c]
+                    map[r][c] = '┌'
                 } else if (map[r][c] == 'J') {
                     if (lastCross == 'L') {
                         lastCross = null
@@ -154,6 +159,7 @@ fun tilesEnclosed(maze: List<String>) {
                         lastCross = null
                         isIn = !isIn    
                     }
+                    map[r][c] = '┘'
                 } else if (map[r][c] == '7') {
                     if (lastCross == 'F') {
                         lastCross = null
@@ -162,6 +168,7 @@ fun tilesEnclosed(maze: List<String>) {
                         lastCross = null
                         isIn = !isIn    
                     }
+                    map[r][c] = '┐'
                 }                
             } else if (!(P(r, c) in pipes)) {
                 map[r][c] = if (isIn) 'I' else 'O'
