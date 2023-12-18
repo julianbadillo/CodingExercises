@@ -8,36 +8,45 @@ fun main(args: Array<String>) {
     println(total)
 }
 
+// group class
+data class G(val l: Int, var pos: Int = 0, var maxPos: Int = 0) {
+    override fun toString() = "G($l, $pos, $maxPos)"
+}
+
 fun countArrangements(line: String): Int {
     val parts = line.split(" ")
-    var springs = (1..5).map { parts[0] }.joinToString("?")
-    val groups = (1..5).flatMap{ parts[1].split(",").map { x -> x.toInt() } }// damaged springs
+    // expansion
+    var springs = parts[0] //(1..5).map { parts[0] }.joinToString("?")
+    val groups = parts[1].split(",").map { it.toInt() }.map { l -> G(l)} //(1..5).flatMap{ parts[1].split(",").map { x -> x.toInt() }.map { l -> G(l)} }// damaged springs
+    var maxPos = springs.length + 1
+    groups.reversed().forEach{
+        maxPos -= (it.l + 1)
+        it.maxPos = maxPos
+    }
     println(springs)
     println(groups)
-    val positions = mutableListOf<Int>()
     var pos = 0
-    for (g in groups) { 
-        positions.add(pos)
-        pos += (g + 1) // at least one separation
+    groups.forEach {
+        it.pos = pos
+        pos += (it.l + 1) // at least one separation
     }
     var count = 0
     do {
-        if (matches(springs, groups, positions)) count++
-    } while (nextPosition(positions, groups, springs.length))
+        if (matches(springs, groups)) count++
+    } while (nextPosition(groups))
     return count
 }
 
 /* Moves the array to the next position */
-fun nextPosition(positions: MutableList<Int>, groups: List<Int>, length: Int): Boolean {
+fun nextPosition(groups: List<G>): Boolean {
     var i = groups.size - 1
     while (i >= 0) {
         // calculate space needed to the right of it
-        val right = (i..<groups.size).map{j -> groups[j] + 1}.sum()
-        if (positions[i] <= length - right) {
-            positions[i]++ // move it
+        if (groups[i].pos < groups[i].maxPos) {
+            groups[i].pos++ // move it
             // move all the ones to the right
             ((i + 1)..<groups.size).forEach { j ->
-                positions[j] = positions[j - 1] + 1 + groups[j - 1]
+                groups[j].pos = groups[j - 1].pos + 1 + groups[j - 1].l
             }
             // println("positions += $positions")
             return true
@@ -49,11 +58,10 @@ fun nextPosition(positions: MutableList<Int>, groups: List<Int>, length: Int): B
 }
 
 /* Evaluates factibility */
-fun matches(springs: String, groups: List<Int>, positions: List<Int>): Boolean {
+fun matches(springs: String, groups: List<G>): Boolean {
     val arr = Array<Char>(springs.length) {'.'}
-    positions.zip(groups) {
-        pos: Int, g: Int ->
-        (pos..<pos+g).forEach {
+    groups.forEach {
+        (it.pos..<it.pos + it.l).forEach {
             i ->
             arr[i] = '#'
         }
@@ -65,6 +73,6 @@ fun matches(springs: String, groups: List<Int>, positions: List<Int>): Boolean {
         else if (a == '?') true
         else false
     }.all { it }
-    // println("$solution vs $springs = $r")
+    println("$solution vs $springs = $r")
     return r
 }
