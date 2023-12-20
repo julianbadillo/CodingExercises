@@ -37,7 +37,8 @@ fun processParts(lines: List<String>) {
         parts.add(parsePart(ite.next()))
     }
     val accepted = parts.filter { processPart(workflows, it) }
-    // println(accepted)
+    println(accepted)
+    println(accepted.size)
     println(accepted.map{ it.values.sum() }.sum())
     
 }
