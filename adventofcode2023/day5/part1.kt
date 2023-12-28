@@ -23,9 +23,7 @@ fun parseInput(reader: BufferedReader): List<List<R>> {
         val list = mutableListOf<R>()
         while (reader.ready()) {
             val line = reader.readLine()
-            if (line == "") {
-                break
-            }
+            if (line == "") break
             val nums = line.split(" ").map { it.toLong() }
             list.add(R(nums[1], nums[2], nums[0] - nums[1]))
         }

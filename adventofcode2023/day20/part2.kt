@@ -92,16 +92,14 @@ fun pushButton(map: Map<String, Gate>): Boolean {
         val gate = map[dest]
         if (gate == null) continue
         val res = gate.receivePulse(pulse, origin)
-        if (res != null) {
-            // count pulses
-            for (dest2 in gate.dest) {
-                if (dest2 == "rx") {
-                    // println("$dest -${if (res) "high" else "low"}-> $dest2") 
-                    if (!res) return true
-                }
-                queue.addLast(GP(dest, dest2, res))
-                // println("$dest -${if (res) "high" else "low"}-> $dest2")
+        if (res == null) continue    
+        for (dest2 in gate.dest) {
+            if (dest2 == "rx") {
+                // println("$dest -${if (res) "high" else "low"}-> $dest2") 
+                if (!res) return true
             }
+            queue.addLast(GP(dest, dest2, res))
+            // println("$dest -${if (res) "high" else "low"}-> $dest2")
         }
     }
     // println("Low pulses=$low, Highpulses=$high")

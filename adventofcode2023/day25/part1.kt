@@ -163,7 +163,7 @@ fun bfsDistance(graph: Map<String, Set<String>>, dist: MutableMap<Edge, Int>, st
             if (visited.contains(node2)) continue
             if (inQueue.contains(node2)) continue
             val edge2 = Edge(start, node2)
-            if (dist[edge2] != null && d + 1 > dist[edge2] ?: -1) continue
+            if (dist[edge2]?.let { d + 1 > it } ?: false) continue
             dist[edge2] = d + 1
             queue.addLast(node2)
             inQueue.add(node2)

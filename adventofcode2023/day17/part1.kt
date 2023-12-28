@@ -68,9 +68,9 @@ fun minHeatLoss(map: List<String>) : Int {
             val pos2 = P(r = pos.r + dir2.dr, c = pos.c + dir2.dc, l = if(pos.dir == dir2) pos.l + 1 else 1, dir = dir2, prev = pos)
             if (pos2.l > 3) continue
             if (!pos2.inBounds(R, C)) continue
-            if (visited.contains(pos2)) continue
-            if (inQueue.contains(pos2)) continue
-            if (distance[pos2] != null && (distance[pos2] ?: 0) < dist + cost[pos2.r][pos2.c]) continue
+            if (pos2 in visited) continue
+            if (pos2 in inQueue) continue
+            if (distance[pos2]?.let { it < dist + cost[pos2.r][pos2.c] } ?: false) continue
             // println("$pos -> $pos2")
             distance[pos2] = dist + cost[pos2.r][pos2.c]
             queue.add(pos2)

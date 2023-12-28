@@ -121,17 +121,20 @@ fun parseWorkflow(line: String, workflows: MutableMap<String, List<Rule>>) {
     val ruleText = mat?.groups?.get(2)?.value ?: ""
     val rules = mutableListOf<Rule>()
     for (rule in ruleText.split(",") ) {
-        val mat2 = pat2.matchEntire(rule)
-        if (mat2?.groups?.get(1) != null) {
-            rules.add(Rule(mat2.groups.get(1)?.value ?:""))
-        } else {
-            rules.add(Rule(
-                dest = mat2?.groups?.get(6)?.value ?: "",
-                prop = mat2?.groups?.get(3)?.value,
-                op = mat2?.groups?.get(4)?.value,
-                v =  mat2?.groups?.get(5)?.value?.toInt(),
-            ))
-        }
+        pat2.matchEntire(rule)?.groups?.let {
+            // only destination
+            if (it.get(1) != null) {
+                rules.add(Rule(it.get(1)?.value ?: ""))
+            } else {
+                // logic rule
+                rules.add(Rule(
+                    dest = it.get(6)?.value ?: "",
+                    prop = it.get(3)?.value,
+                    op = it.get(4)?.value,
+                    v =  it.get(5)?.value?.toInt(),
+                ))
+            }
+        } ?: throw IllegalStateException("!!! NO MATCH")
     }
     workflows[name] = rules
 }

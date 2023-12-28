@@ -66,9 +66,10 @@ fun parseGate(line: String): Gate {
 
 data class GP(val origin: String, val dest: String, val pulse: Boolean)
 data class R(var high: Int, var low: Int)
+
+/* Simulate when pushing a button */
 fun pushButton(map: Map<String, Gate>): R {
     // push a button
-
     var queue = ArrayDeque<GP>()
     queue.addLast(GP("button", "broadcast", false)) // send a low pulse to broadcast
     var result = R(high=0, low=1) // count the button pulse
@@ -78,14 +79,13 @@ fun pushButton(map: Map<String, Gate>): R {
         val gate = map[dest]
         if (gate == null) continue
         val res = gate.receivePulse(pulse, origin)
-        if (res != null) {
-            // count pulses
-            for (dest2 in gate.dest) {
-                if (res) result.high++ else result.low++
-                queue.addLast(GP(dest, dest2, res))
-                // println("$dest -${if (res) "high" else "low"}-> $dest2")
-            }
-        }
+        if (res == null) continue
+        // count pulses
+        for (dest2 in gate.dest) {
+            if (res) result.high++ else result.low++
+            queue.addLast(GP(dest, dest2, res))
+            // println("$dest -${if (res) "high" else "low"}-> $dest2")
+        }    
     }
     // println("Low pulses=$low, Highpulses=$high")
     return result
