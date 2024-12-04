@@ -3,16 +3,28 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "day1-part1": "tsc day1-part1.ts && node day1-part1.js < day1.txt",
-    "day1-part2": "tsc day1-part2.ts && node day1-part2.js < day1.txt"
+    "build": "tsc",
+    "test": "tsc && mocha ./build/test/",
+    "day1-part1": "tsc && node build/src/day1-part1.js",
+    "day1-part2": "tsc && node build/src/day1-part2.js",
+    "day2-part1": "tsc && node build/src/day2-part1.js",
+    "day2-part2": "tsc && node build/src/day2-part2.js",
+    "day3-part1": "tsc && node build/src/day3-part1.js",
+    "day3-part2": "tsc && node build/src/day3-part2.js",
+    "day4-part1": "tsc && node build/src/day4-part1.js",
+    "day4-part2": "tsc && node build/src/day4-part2.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "typescript": "^5.7.2"
-  },
   "devDependencies": {
-    "@types/node": "^22.10.1"
+    "@eslint/js": "^9.16.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.1",
+    "assert": "^2.1.0",
+    "eslint": "^9.16.0",
+    "mocha": "^11.0.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.17.0"
   }
 }
