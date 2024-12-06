@@ -13,7 +13,7 @@ export const isSafe = (nums: number[]): boolean => {
     return true;
 }
 
-export const solve = (data: string) => {
+export const solve = (data: string): number => {
     const lines = data.split('\n');
     return lines.map((line: string) => {
         const nums = line.split(' ').map(x => Number.parseInt(x));

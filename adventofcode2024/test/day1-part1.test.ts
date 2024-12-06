@@ -15,6 +15,6 @@ describe('day1-part1', () => {
 1   3
 3   9
 3   3`
-        assert.equal(11, solve(s));
+        assert.equal(solve(s), 11);
     })
 });

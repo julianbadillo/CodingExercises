@@ -1,20 +1,20 @@
 import * as process from 'node:process';
 
-const mult_re = /mul\((\d{1,3}),(\d{1,3})\)/g;
+export const mult_re = /mul\((\d{1,3}),(\d{1,3})\)/g;
 
-const solve = (data: object) => {
-    let s = 0;
-    data.toString()
-        .split('\n')
+export const solve = (data: string): number => {
+    return data.split('\n')
         .filter(line => line.length > 0)
-        .forEach(line => {
-            s += [...line.matchAll(mult_re)]
+        .map(line => {
+            return [...line.matchAll(mult_re)]
                 .map(m => Number.parseInt(m[1]) * Number.parseInt(m[2]))
                 .reduce((a, b) => a + b);
-        });
-    process.stdout.write(`s = ${s}\n`);
+        }).reduce((a, b) => a + b);
 }
 
 if (require.main === module) {
-    process.stdin.on('data', solve);
+    process.stdin.on('data', (data: object) => {
+        const r = solve(data.toString());
+        process.stdout.write(`r = ${r}\n`);
+    });
 }

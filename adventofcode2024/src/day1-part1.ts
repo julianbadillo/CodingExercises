@@ -4,7 +4,7 @@ export const distance = (a: Array<number>, b: Array<number>, i: number) => {
     return a[i] < b[i] ? (b[i] - a[i]) : (a[i] - b[i]);
 };
 
-export const solve = (data: string) => {
+export const solve = (data: string): number => {
     const lines = data.split('\n');
     const l1 = new Array(lines.length);
     const l2 = new Array(lines.length);
@@ -25,7 +25,6 @@ export const solve = (data: string) => {
 if (require.main === module) {
     process.stdin.on('data', (data: object) => {
         const r = solve(data.toString());
-        process.stdout.write(`r = ${r}`);
-        process.stdout.write('\n');
+        process.stdout.write(`r = ${r}\n`);
     });
 }

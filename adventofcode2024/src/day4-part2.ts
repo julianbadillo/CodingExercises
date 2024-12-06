@@ -1,14 +1,5 @@
 import * as process from 'node:process';
-const D = {
-    N: [-1, 0],
-    NE: [-1, 1],
-    E: [0, 1],
-    SE: [1, 1],
-    S: [1, 0],
-    SW: [1, -1],
-    W: [0, -1],
-    NW: [-1, -1],
-}
+import {D} from './day4-part1';
 
 export const dirs = [
     [D.NW, D.NE],
@@ -17,8 +8,7 @@ export const dirs = [
     [D.SW, D.NW],
 ];
 
-
-const findXmas = (mat: string[], r: number, c: number): boolean => {
+export const findXmas = (mat: string[], r: number, c: number): boolean => {
     if (mat[r][c] != 'A') return false;
     for (const [d1, d2] of dirs) {
         // diagonally opposite
@@ -31,24 +21,16 @@ const findXmas = (mat: string[], r: number, c: number): boolean => {
             && mat[r + d4[0]][c + d4[1]] === 'S'){
             return true;
         }
-        // other way around
-        if (mat[r + d1[0]][c + d1[1]] === 'S'
-            && mat[r + d2[0]][c + d2[1]] === 'S'
-            && mat[r + d3[0]][c + d3[1]] === 'M'
-            && mat[r + d4[0]][c + d4[1]] === 'M')
-            return true;
     }
-
     return false;
 }
 
-const solve = (data: object) => {
+export const solve = (data: string): number => {
     let s = 0;
-
-    const mat = data.toString().split('\n');
+    const mat = data.split('\n');
     const R = mat.length;
     const C = mat[0].length;
-    console.log(R, C);
+    //console.log(R, C);
     for (let i = 1; i < R - 1; i++) {
         for (let j = 1; j < C - 1; j++) {
             if (findXmas(mat, i, j)) {
@@ -57,9 +39,13 @@ const solve = (data: object) => {
             }
         }
     }
-    process.stdout.write(`s = ${s}\n`);
+    return s;
 }
 
+
 if (require.main === module) {
-    process.stdin.on('data', solve);
+    process.stdin.on('data', (data: object) => {
+        const s = solve(data.toString());
+        process.stdout.write(`s = ${s}\n`);
+    });
 }

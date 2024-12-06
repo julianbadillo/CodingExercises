@@ -40,9 +40,7 @@ export const fitRules = (update: number[], rules: Map<number, Rule>): boolean =>
 }
 
 export const solve = (data: string): number => {
-
     const parts = data.split('\n\n');
-
     const rules_data = parts[0].split('\n')
         .map(l => l.split('|')
             .map(x => Number.parseInt(x)));

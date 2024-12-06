@@ -1,8 +1,8 @@
 import * as process from 'node:process';
 
-const mult_re = /(mul\((\d{1,3}),(\d{1,3})\))|(do\(\))|(don't\(\))/g;
+export const mult_re = /(mul\((\d{1,3}),(\d{1,3})\))|(do\(\))|(don't\(\))/g;
 
-const solve = (data: object) => {
+export const solve = (data: string): number => {
     let s = 0;
     let doing = true;
     data.toString()
@@ -19,9 +19,12 @@ const solve = (data: object) => {
                 }
             });
         });
-    process.stdout.write(`s = ${s}\n`);
+    return s;
 }
 
 if (require.main === module) {
-    process.stdin.on('data', solve);
+    process.stdin.on('data', (data: object) => {
+        const r = solve(data.toString());
+        process.stdout.write(`r = ${r}\n`);
+    });
 }
