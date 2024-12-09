@@ -20,7 +20,9 @@
     "day7-part1": "tsc && node build/src/day7-part1.js",
     "day7-part2": "tsc && node build/src/day7-part2.js",
     "day8-part1": "tsc && node build/src/day8-part1.js",
-    "day8-part2": "tsc && node build/src/day8-part2.js"
+    "day8-part2": "tsc && node build/src/day8-part2.js",
+    "day9-part1": "tsc && node build/src/day9-part1.js",
+    "day9-part2": "tsc && node build/src/day9-part2.js"
   },
   "author": "",
   "license": "ISC",
