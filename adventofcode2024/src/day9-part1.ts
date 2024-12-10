@@ -19,7 +19,7 @@ export class Block {
 
 export const parseBlocks = (data: string): Block[] => {
     let p = 0;
-    const res = data.trim()
+    return data.trim()
         .split('')
         .map(c => Number.parseInt(c))
         .map((size, i) => {
@@ -29,8 +29,6 @@ export const parseBlocks = (data: string): Block[] => {
             return b;
         })
         .filter(x => x !== null);
-
-    return res;
 }
 
 export const squeeze = (blocks: Block[]): Block[] => {

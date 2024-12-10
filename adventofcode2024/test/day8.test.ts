@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { solve as solve1, Node, parseMap } from '../src/day8-part1';
 import { solve as solve2, allAntinodes } from '../src/day8-part2';
-describe('day8', () => {
+describe('day08', () => {
 
     it('class Node', () => {
         const n1 = new Node(1, 2, '0');

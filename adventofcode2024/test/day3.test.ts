@@ -2,7 +2,7 @@ import assert from 'assert';
 import { mult_re as mult_re1, solve as solve1 } from '../src/day3-part1';
 import { mult_re as mult_re2, solve as solve2 } from '../src/day3-part2';
 
-describe('day3', () => {
+describe('day03', () => {
     it('mult_re-part1-match', () => {
         assert.deepEqual('mul(3,4)'.match(mult_re1), ['mul(3,4)']);
         assert.deepEqual('mul(13,24)'.match(mult_re1), ['mul(13,24)']);

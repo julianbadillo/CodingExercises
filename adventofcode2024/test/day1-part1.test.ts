@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { distance, solve } from '../src/day1-part1';
 
-describe('day1-part1', () => {
+describe('day01-part1', () => {
     it('distance', () => {
         assert.equal(0, distance([1, 2, 3], [1, 2, 3], 0));
         assert.equal(0, distance([1, 2, 3], [1, 1, 5], 0));

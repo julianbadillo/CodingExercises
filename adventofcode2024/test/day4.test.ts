@@ -2,7 +2,7 @@ import assert from 'assert';
 import { findXmas as findXmas1, solve as solve1, D } from '../src/day4-part1';
 import { findXmas as findXmas2, solve as solve2 } from '../src/day4-part2';
 
-describe('day4', () => {
+describe('day04', () => {
     it('findXmas-part1', () => {
         let m = [
             'XMAS',

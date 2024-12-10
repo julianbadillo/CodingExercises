@@ -2,7 +2,7 @@ import assert from 'assert';
 import { solve as solve1, Rule, parseRules, fitRules } from '../src/day5-part1';
 import { solve as solve2, sortByRules } from '../src/day5-part2';
 
-describe('day5', () => {
+describe('day05', () => {
     it('parseRules', () => {
         const data = [[1, 2], [2, 3], [1, 3]];
         const rules = parseRules(data);

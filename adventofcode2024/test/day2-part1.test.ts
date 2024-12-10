@@ -2,7 +2,7 @@ import assert from 'assert';
 import { isSafe, solve as solve1 } from '../src/day2-part1';
 import { solve as solve2, isSafeRemoving } from '../src/day2-part2';
 
-describe('day2-part1', () => {
+describe('day02-part1', () => {
     const testCases = [
         { nums: [1, 2, 3, 5], safe: true },
         { nums: [7, 6, 4, 2, 1], safe: true },

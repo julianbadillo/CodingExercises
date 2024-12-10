@@ -2,7 +2,7 @@ import assert from 'assert';
 import { solve as solve1, parseBlocks, Block, squeeze } from '../src/day9-part1';
 import { solve as solve2, squeezeFull } from '../src/day9-part2';
 
-describe('day9', () => {
+describe('day09', () => {
 
     it('class Block', () => {
         assert.equal(new Block(null, 12, 4).print(), '....');

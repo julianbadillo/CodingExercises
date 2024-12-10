@@ -2,7 +2,7 @@ import assert from 'assert';
 import { solve as solve1, canBeSolved, operations, add, mul } from '../src/day7-part1';
 import { solve as solve2, canBeSolved as canBeSolved2, operations as operations2, conc, next } from '../src/day7-part2';
 
-describe('day7', () => {
+describe('day07', () => {
 
     it('split-equations', () => {
         const data = `190: 10 19

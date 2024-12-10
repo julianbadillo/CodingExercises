@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { solve as solve1, P, parseMap} from '../src/day6-part1';
 import { solve as solve2} from '../src/day6-part2';
-describe('day6', () => {
+describe('day06', () => {
 
     it('class P', () => {
         // test they are treated as the same
