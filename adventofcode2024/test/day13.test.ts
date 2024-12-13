@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 import { solve, re1, re2, Claw } from '../src/day13-part1';
-import { solve as solve2, Claw as Claw2 } from '../src/day13-part2';
+import { solve as solve2, SmarterClaw } from '../src/day13-part2';
 
 describe('day12', () => {
 
@@ -22,26 +22,26 @@ describe('day12', () => {
     it('Claw', () => {
         let claw = new Claw({ x: 94, y: 34, cost: 3 }, { x: 22, y: 67, cost: 1 }, { x: 8400, y: 5400 });
         let b = claw.getPrize()
-        assert.equal(b?.cost, 280);
+        assert.equal(b, 280);
         claw = new Claw({ x: 17, y: 86, cost: 3 }, { x: 84, y: 37, cost: 1 }, { x: 7870, y: 6450 });
         b = claw.getPrize()
-        assert.equal(b?.cost, 200);
+        assert.equal(b, 200);
     });
     it('Claw2', () => {
-        let claw = new Claw2({ x: 94, y: 34, cost: 3 }, { x: 22, y: 67, cost: 1 }, { x: 8400, y: 5400 });
+        let claw = new SmarterClaw({ x: 94, y: 34, cost: 3 }, { x: 22, y: 67, cost: 1 }, { x: 8400, y: 5400 });
         let b = claw.getPrize()
         assert.equal(b, 280);
-        claw = new Claw2({ x: 17, y: 86, cost: 3 }, { x: 84, y: 37, cost: 1 }, { x: 7870, y: 6450 });
+        claw = new SmarterClaw({ x: 17, y: 86, cost: 3 }, { x: 84, y: 37, cost: 1 }, { x: 7870, y: 6450 });
         b = claw.getPrize()
         assert.equal(b, 200);
-        claw = new Claw2({ x: 17, y: 86, cost: 3 }, { x: 84, y: 37, cost: 1 }, { x: 7870, y: 6450 });
+        claw = new SmarterClaw({ x: 17, y: 86, cost: 3 }, { x: 84, y: 37, cost: 1 }, { x: 7870, y: 6450 });
         b = claw.getPrize()
         assert.equal(b, 200);
 
         // Button A: X+26, Y+66
         // Button B: X+67, Y+21
         // Prize: X=12748, Y=12176
-        claw = new Claw2({ x: 26, y: 66, cost: 3 }, { x: 67, y: 21, cost: 1 }, { x: 12748, y: 12176 });
+        claw = new SmarterClaw({ x: 26, y: 66, cost: 3 }, { x: 67, y: 21, cost: 1 }, { x: 12748, y: 12176 });
         b = claw.getPrize()
         assert.equal(b, null);
 
