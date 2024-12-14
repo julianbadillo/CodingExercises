@@ -30,7 +30,9 @@
     "day12-part1": "tsc && node build/src/day12-part1.js",
     "day12-part2": "tsc && node build/src/day12-part2.js",
     "day13-part1": "tsc && node build/src/day13-part1.js",
-    "day13-part2": "tsc && node build/src/day13-part2.js"
+    "day13-part2": "tsc && node build/src/day13-part2.js",
+    "day14-part1": "tsc && node build/src/day14-part1.js",
+    "day14-part2": "tsc && node build/src/day14-part2.js"
   },
   "author": "",
   "license": "ISC",
