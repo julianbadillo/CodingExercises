@@ -1,5 +1,5 @@
 import assert from "assert";
-import { Robot, solve, sumGPS, move, DIRS, D } from "../src/day15-part1";
+import { Robot, solve, move, DIRS, D } from "../src/day15-part1";
 import { findBoxes, moveBetter, solve as solve2 } from "../src/day15-part2";
 
 describe('day15', () => {
@@ -106,11 +106,10 @@ describe('day15', () => {
         boxes = findBoxes(map2, {r: 2, c: 7}, DIRS.get('v') as D);
         assert.notEqual(boxes, undefined);
         assert.equal(boxes?.length, 4, boxes?.map(b => `[${b.r}, ${b.c}]`).join());
-        
     });
 
     it('moveBetter', () => {
-        let map1 = `##############
+        const map1 = `##############
 ##......##..##
 ##..........##
 ##....[][]..##

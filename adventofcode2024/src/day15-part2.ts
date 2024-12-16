@@ -1,4 +1,4 @@
-import { Robot, printMap, D, DIRS, sumGPS } from "./day15-part1";
+import { Robot, D, DIRS, sumGPS } from "./day15-part1";
 
 export const findBoxes = (map: string[][], robot: Robot, d: D): Robot[] | undefined => {
     const boxes: Robot[] = [];
