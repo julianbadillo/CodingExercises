@@ -36,7 +36,11 @@
     "day15-part1": "tsc && node build/src/day15-part1.js",
     "day15-part2": "tsc && node build/src/day15-part2.js",
     "day16-part1": "tsc && node build/src/day16-part1.js",
-    "day16-part2": "tsc && node build/src/day16-part2.js"
+    "day16-part2": "tsc && node build/src/day16-part2.js",
+    "day17-part1": "tsc && node build/src/day17-part1.js",
+    "day17-part2": "tsc && node build/src/day17-part2.js",
+    "day18-part1": "tsc && node build/src/day18-part1.js",
+    "day18-part2": "tsc && node build/src/day18-part2.js"
   },
   "author": "",
   "license": "ISC",
