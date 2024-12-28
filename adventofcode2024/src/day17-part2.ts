@@ -6,7 +6,7 @@ export class HardCodedComputer {
     // Register B: 0
     // Register C: 0
     // Program: 2,4,1,2,7,5,0,3,1,7,4,1,5,5,3,0
-    a: bigint = BigInt(0);
+    a: bigint = 0n;
     b: number = 0;
     c: number = 0;
     prog: number[] = [];
@@ -41,45 +41,45 @@ export class HardCodedComputer {
 
     cycle(): boolean {
         // console.log(this.a);
-        if (this.a === BigInt(0)) return false;
-        const x = Number(this.a & BigInt(7));
+        if (this.a === 0n) return false;
+        const x = Number(this.a & 7n);
         const shift = x ^ 2; // flip middle bit
         const y = (Number(this.a & BigInt("0b11111111111")) >> shift) & 7;
         const z = (x ^ y ^ 5) & 7;
         this.out.push(z) /// (last 3 bits)
-        this.a = this.a >> BigInt(3)
+        this.a = this.a >> 3n
         return true;
     }
 }
 
 export const solve = (): string => {
-    let starta = BigInt(346);
-    starta <<= BigInt(3);
-    starta |= BigInt(402);
-    starta <<= BigInt(3);
-    starta |= BigInt(144);
-    starta <<= BigInt(3);
-    starta |= BigInt(129);
+    let starta = 346n;
+    starta <<= 3n;
+    starta |= 402n;
+    starta <<= 3n;
+    starta |= 144n;
+    starta <<= 3n;
+    starta |= 129n;
     
-    starta <<= BigInt(3);
+    starta <<= 3n;
     
-    starta <<= BigInt(3);
+    starta <<= 3n;
     
-    starta <<= BigInt(3);
+    starta <<= 3n;
     
-    starta <<= BigInt(3);
-    starta |= BigInt(318);
-    // starta |= BigInt(2546);
-    starta <<= BigInt(3);
-    starta |= BigInt(434);
-    starta <<= BigInt(3);
-    starta |= BigInt(339);
-    starta <<= BigInt(3);
-    starta |= BigInt(158);
-    starta <<= BigInt(3);
-    starta |= BigInt(240);
-    starta <<= BigInt(6);
-    starta |= BigInt(15);
+    starta <<= 3n;
+    starta |= 318n;
+    // starta |= 2546n;
+    starta <<= 3n;
+    starta |= 434n;
+    starta <<= 3n;
+    starta |= 339n;
+    starta <<= 3n;
+    starta |= 158n;
+    starta <<= 3n;
+    starta |= 240n;
+    starta <<= 6n;
+    starta |= 15n;
     console.log(starta);
     const comp = new HardCodedComputer(starta);//(2024);
     // console.log(c);
