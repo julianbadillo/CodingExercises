@@ -11,6 +11,9 @@ export class P {
     toString(): string {
         return `${this.r},${this.c}`;
     }
+    key(): string {
+        return this.toString();
+    }
 }
 
 export const D = new Map<string, P>([

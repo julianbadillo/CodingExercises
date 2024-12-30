@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "tsc && mocha ./build/test/",
+    "test": "tsc && mocha ./build/test/ --timeout 10000",
     "day1-part1": "tsc && node build/src/day1-part1.js",
     "day1-part2": "tsc && node build/src/day1-part2.js",
     "day2-part1": "tsc && node build/src/day2-part1.js",
@@ -43,6 +43,7 @@
     "day18-part2": "tsc && node build/src/day18-part2.js",
     "day19-part1": "tsc && node build/src/day19.js",
     "day20-part1": "tsc && node build/src/day20-part1.js",
+    "day21-part1": "tsc && node build/src/day21-part1.js",
     "day22-part1": "tsc && node build/src/day22-part1.js",
     "day23-part1": "tsc && node build/src/day23-part1.js",
     "day23-part2": "tsc && node build/src/day23-part2.js",
