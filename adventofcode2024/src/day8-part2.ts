@@ -1,7 +1,6 @@
 import * as process from 'node:process';
 import { parseMap, Node } from './day8-part1';
 
-// TODO extend the class
 export const allAntinodes = (n1: Node, n2: Node, R: number, C: number): Node[] => {
     const dr = n1.r - n2.r;
     const dc = n1.c - n2.c;
