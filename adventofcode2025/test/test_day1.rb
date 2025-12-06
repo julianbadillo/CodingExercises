@@ -44,6 +44,6 @@ class Day1Test < Minitest::Test
     File.open('./day1/input_test.txt', 'r') do |file|
         moves = file.each_line.map { |l| [l[0], l[1..].to_i] }
     end
-    assert_equal 6, Day1.part2(moves)
+assert_equal 6, Day1.part2(moves)
   end
 end
