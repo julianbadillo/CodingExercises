@@ -23,8 +23,8 @@ class Day4Test < Minitest::Test
     assert_equal 10, mat.length
     n_rows = mat.length
     n_cols = mat[0].length
-    assert true, Day4.is_roll_free(mat, n_rows, n_cols, 0, 2)
-    assert true, Day4.is_roll_free(mat, n_rows, n_cols, 2, 6)
+    assert Day4.is_roll_free(mat, n_rows, n_cols, 0, 2)
+    assert Day4.is_roll_free(mat, n_rows, n_cols, 2, 6)
   end
 
   def test_count_free_rolls()
@@ -55,7 +55,7 @@ class Day4Test < Minitest::Test
     rolls = Day4.find_free_rolls(mat)
     assert_equal 13, rolls.length
     assert_equal M.new(0, 2), rolls[0]
-    assert true, rolls.include?(M.new(2, 6))
+    assert rolls.include?(M.new(2, 6))
   end
 
   def test_remove_free_rolls()
