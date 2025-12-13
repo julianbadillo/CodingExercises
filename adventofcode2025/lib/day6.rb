@@ -32,4 +32,29 @@ module Day6
     probs = self.parse_input(lines)
     return probs.map{|p| p.res}.sum
   end
+
+  def self.parse_cephalopod_input(lines)
+    num_r = lines.length
+    num_c = lines[0].length
+    probs = []
+    p = P.new
+    for c in (0...num_c) do
+      col_str = (0...num_r - 1).map {|r| lines[r][c] }.join("").strip
+      last_char = lines[num_r - 1][c]
+      # set operator if not empty
+      p.op = last_char if last_char != " "
+      if col_str == ""
+        probs.push(p)
+        p = P.new
+      else
+        p.nums.push(col_str.to_i)
+      end
+    end
+    probs.push(p)
+    probs
+  end
+  def self.part2(lines)
+    probs = self.parse_cephalopod_input(lines)
+    return probs.map{|p| p.res}.sum
+  end
 end

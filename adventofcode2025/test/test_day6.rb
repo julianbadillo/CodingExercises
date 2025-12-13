@@ -44,4 +44,28 @@ class Day6Test < Minitest::Test
 *   +   *   +  ".split("\n")
     assert_equal 4277556, Day6.part1(lines)
   end
+
+  def test_parse_cephalopod_input()
+    lines = "123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  ".split("\n")
+    probs = Day6.parse_cephalopod_input(lines)
+    assert_equal 4, probs.length
+    assert_equal 3, probs[0].nums.length
+    assert_equal [1, 24, 356], probs[0].nums
+    assert_equal "*", probs[0].op
+    assert_equal 3, probs[1].nums.length
+    assert_equal [369, 248, 8], probs[1].nums
+    assert_equal "+", probs[1].op
+  end
+
+  def test_part2()
+    lines = "123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  ".split("\n")
+    assert_equal 3263827, Day6.part2(lines)
+  end
+
 end
