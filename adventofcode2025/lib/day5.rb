@@ -88,7 +88,7 @@ module Day5
   end
 
   def self.part2(lines)
-    ranges, ingredients = self.parse_input(lines)
+    ranges, _ = self.parse_input(lines)
     res = self.merge_ranges(ranges)
     
     for i in (0...res.length) do
