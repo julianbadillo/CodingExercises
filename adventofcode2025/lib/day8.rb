@@ -97,7 +97,7 @@ module Day8
     circuits.length == 1 && circuits.first.length == boxes.length
   end
 
-  """Connect junction boxes until only one circuit, return the circuit"""
+  # Connect junction boxes until only one circuit, return the circuit.
   def self.connect_until_joined(boxes)
     # get the closest n pairs
     links = self.build_links(boxes)
