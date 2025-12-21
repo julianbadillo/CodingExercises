@@ -174,7 +174,7 @@ module Day9
     # squares
     sqs = self.build_unadjacent_squares(pts)
     for sq in sqs do
-      print("#{sq.to_s}: #{sq.area}\n")
+      # print("#{sq.to_s}: #{sq.area}\n")
       # find the first that's completely contained
       if poly.contains_sq?(sq)
         # test all the points in the edges
