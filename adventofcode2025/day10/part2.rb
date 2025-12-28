@@ -1,5 +1,5 @@
-require_relative '../lib/day11'
+require_relative '../lib/day10'
 
 
 lines = STDIN.each_line.map(&:chomp).reject(&:empty?)
-puts Day11.part1(lines)
+puts Day10.part2(lines)
